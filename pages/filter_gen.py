@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from src.analyzer import ImageAnalyzer, FltParams, SafetyLimits, DEFAULT_SAFETY
 from src.hist_analyzer import HistogramAnalyzer
+from src.advanced_analyzer import AdvancedAnalyzer
 from src.flt_io import to_flt_bytes, load_flt
 from src.preview import apply_filter, simulate_v105
 from src.preset_builder import load_presets, preset_to_flt_params
@@ -117,14 +118,34 @@ def _detect_style_tags(p: FltParams) -> list[tuple[str, str]]:
     return tags
 
 
-def _run_analysis(target_img: Image.Image, base_img=None) -> tuple[FltParams, list[str]]:
+def _run_analysis(
+    target_img: Image.Image,
+    base_img=None,
+    engine: str = "高精度モード",
+) -> tuple[FltParams, list[str], dict]:
+    """
+    戻り値: (params, warnings, diag_info)
+    diag_info は表示用の補足情報 dict
+    """
     if base_img is not None:
-        analyzer = HistogramAnalyzer()
-        params, diag = analyzer.analyze(base_img, target_img, safety=DEFAULT_SAFETY)
-        return params, diag.warnings
+        if engine == "高精度モード":
+            analyzer = AdvancedAnalyzer()
+            params, diag = analyzer.analyze(base_img, target_img, safety=DEFAULT_SAFETY)
+            diag_info = {
+                "lab_base":    diag.lab_base,
+                "lab_target":  diag.lab_target,
+                "region_weights": diag.region_weights,
+                "spline_gamma":   diag.spline_gamma,
+            }
+            return params, diag.warnings, diag_info
+        else:
+            analyzer = HistogramAnalyzer()
+            params, diag = analyzer.analyze(base_img, target_img, safety=DEFAULT_SAFETY)
+            return params, diag.warnings, {}
     else:
         analyzer = ImageAnalyzer()
-        return analyzer.analyze_from_target_only(target_img, safety=DEFAULT_SAFETY)
+        params, warnings = analyzer.analyze_from_target_only(target_img, safety=DEFAULT_SAFETY)
+        return params, warnings, {}
 
 
 # ── セッション初期化 ────────────────────────────────────────────────────────
@@ -136,6 +157,8 @@ for key, default in [
     ("analyzed", False),
     ("warnings", []),
     ("strength", 1.0),
+    ("diag_info", {}),
+    ("engine", "高精度モード"),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -244,13 +267,15 @@ generate_btn = st.button(
 
 if generate_btn:
     with st.spinner("色の特徴を読み取っています…"):
-        params, warnings = _run_analysis(
+        params, warnings, diag_info = _run_analysis(
             st.session_state.target_img,
             st.session_state.base_img,
+            st.session_state.engine,
         )
-    st.session_state.params   = params
-    st.session_state.warnings = warnings
-    st.session_state.analyzed = True
+    st.session_state.params    = params
+    st.session_state.warnings  = warnings
+    st.session_state.diag_info = diag_info
+    st.session_state.analyzed  = True
 
 if st.session_state.target_img is None:
     st.info("まず上に写真をアップロードしてください。")
@@ -478,6 +503,61 @@ if st.session_state.analyzed:
 # ════════════════════════════════════════════════════════════════════════════
 
 with st.sidebar:
+    st.subheader("🔬 解析エンジン")
+    engine = st.radio(
+        "エンジン",
+        ["高精度モード", "標準モード", "かんたんモード"],
+        index=0,
+        label_visibility="collapsed",
+    )
+    st.session_state.engine = engine
+    ENGINE_DESC = {
+        "高精度モード": (
+            "**Lab色空間 ＋ 分割領域 ＋ スプライン**\n\n"
+            "明暗・色味を人間の知覚に近い精度で解析。\n"
+            "シャドウ/ハイライトも個別に補正。\n"
+            "⚠️ 元画像と理想画像の **両方が必要**。"
+        ),
+        "標準モード": (
+            "**ヒストグラムマッチング**\n\n"
+            "色の分布を丸ごとマッチング。\n"
+            "⚠️ 元画像と理想画像の **両方が必要**。"
+        ),
+        "かんたんモード": (
+            "**統計比率**\n\n"
+            "理想画像 **1枚のみ** で動作。\n"
+            "精度は上2つより下がります。"
+        ),
+    }
+    st.info(ENGINE_DESC[engine])
+
+    # 高精度モード診断情報
+    if st.session_state.diag_info and engine == "高精度モード":
+        with st.expander("🔬 Lab解析の詳細", expanded=False):
+            d = st.session_state.diag_info
+            if "lab_base" in d and "lab_target" in d:
+                b, t = d["lab_base"], d["lab_target"]
+                st.caption("**Lab 統計値（Base → Target）**")
+                st.markdown(f"明るさ(L*): `{b['L_mean']:.1f}` → `{t['L_mean']:.1f}`")
+                st.markdown(f"コントラスト(L* std): `{b['L_std']:.1f}` → `{t['L_std']:.1f}`")
+                st.markdown(f"色の鮮やかさ(Chroma): `{b['chroma']:.1f}` → `{t['chroma']:.1f}`")
+                delta_b = t['b_mean'] - b['b_mean']
+                delta_a = t['a_mean'] - b['a_mean']
+                tone = "暖色寄り 🔴" if delta_b > 2 else ("寒色寄り 🔵" if delta_b < -2 else "ニュートラル ⚪")
+                tint = "赤/マゼンタ寄り" if delta_a > 2 else ("緑寄り" if delta_a < -2 else "なし")
+                st.markdown(f"色温度の変化: **{tone}** (Δb={delta_b:+.1f})")
+                st.markdown(f"色かぶり: **{tint}** (Δa={delta_a:+.1f})")
+            if "region_weights" in d:
+                st.caption("**領域ごとの解析ウェイト**")
+                for region, w in d["region_weights"].items():
+                    label = {"shadow":"シャドウ","midtone":"ミッドトーン","highlight":"ハイライト"}[region]
+                    st.markdown(f"{label}: {w*100:.0f}%")
+            if "spline_gamma" in d:
+                st.caption("**スプライン推定ガンマ（生値）**")
+                for ch, g in d["spline_gamma"].items():
+                    st.markdown(f"Gamma{ch}: `{g:.3f}`")
+
+    st.divider()
     st.header("📂 以前作ったフィルターを読み込む")
     st.caption("このツールで作ったフィルターファイル(.flt)を読み込んで、数値を調整し直せます。")
     flt_upload = st.file_uploader("フィルターファイル (.flt) を選択", type=["flt"])
