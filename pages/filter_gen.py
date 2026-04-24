@@ -14,6 +14,7 @@ from src.hist_analyzer import HistogramAnalyzer
 from src.flt_io import to_flt_bytes, load_flt
 from src.preview import apply_filter, simulate_v105
 from src.preset_builder import load_presets, preset_to_flt_params
+from src.histogram import histogram_dataframe
 
 
 # ── スタイル ────────────────────────────────────────────────────────────────
@@ -134,6 +135,7 @@ for key, default in [
     ("base_img", None),
     ("analyzed", False),
     ("warnings", []),
+    ("strength", 1.0),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -302,13 +304,24 @@ if st.session_state.analyzed:
     p = st.session_state.params
 
     st.subheader("👁️ STEP 3 ｜ 仕上がりをプレビュー")
-    st.caption(
-        "左が元の写真、右がフィルターを当てたときの予想です。"
-        "V105シミュレーションをONにすると、実機特有のノイズや周辺の暗さなども再現します。"
-    )
 
-    show_sim = st.toggle("📷 V105の実機に近い見え方でシミュレートする", value=False)
+    # ── フィルター強度スライダー ──────────────────────────────────────────────
+    strength = st.slider(
+        "🎚️ フィルターの効き具合",
+        min_value=0, max_value=100,
+        value=int(st.session_state.strength * 100),
+        step=5,
+        format="%d%%",
+        help="0% = 変化なし、100% = フル適用。ちょうどよい強さに調整してください。",
+    )
+    st.session_state.strength = strength / 100
+    p_blended = p.blend(st.session_state.strength)
+
+    if strength < 100:
+        st.caption(f"現在 {strength}% 適用中。スライダーで強さを変えると下のプレビューに即反映されます。")
+
     preview_src = st.session_state.base_img or st.session_state.target_img
+    show_sim = st.toggle("📷 V105の実機に近い見え方でシミュレートする", value=False)
 
     if show_sim:
         c1, c2, c3 = st.columns(3)
@@ -316,12 +329,12 @@ if st.session_state.analyzed:
             st.caption("元の写真")
             st.image(preview_src, use_container_width=True)
         with c2:
-            st.caption("フィルター適用後")
-            st.image(apply_filter(preview_src, p), use_container_width=True)
+            st.caption(f"フィルター適用後（{strength}%）")
+            st.image(apply_filter(preview_src, p_blended), use_container_width=True)
         with c3:
             st.caption("V105実機シミュレーション")
             with st.spinner(""):
-                st.image(simulate_v105(preview_src, p), use_container_width=True)
+                st.image(simulate_v105(preview_src, p_blended), use_container_width=True)
         st.caption(
             "シミュレーションでは、V105特有の粒状感・低解像度感・"
             "明暗の限界・周辺光量落ち・色温度のクセを再現しています。"
@@ -333,8 +346,29 @@ if st.session_state.analyzed:
             st.caption("元の写真")
             st.image(preview_src, use_container_width=True)
         with c2:
-            st.caption("フィルター適用後")
-            st.image(apply_filter(preview_src, p), use_container_width=True)
+            st.caption(f"フィルター適用後（{strength}%）")
+            st.image(apply_filter(preview_src, p_blended), use_container_width=True)
+
+    # ── ヒストグラム表示 ──────────────────────────────────────────────────────
+    with st.expander("📊 色の分布グラフ（ヒストグラム）を見る", expanded=False):
+        st.caption(
+            "横軸は色の明るさ（左 = 暗い、右 = 明るい）、縦軸はその明るさのピクセルの多さです。"
+            "フィルター適用後にグラフがどう変わったか確認できます。"
+        )
+        tab_l, tab_r, tab_g, tab_b = st.tabs(["明るさ全体", "赤(R)", "緑(G)", "青(B)"])
+        filtered_img = apply_filter(preview_src, p_blended)
+        for tab, channel in zip(
+            [tab_l, tab_r, tab_g, tab_b], ["輝度", "R", "G", "B"]
+        ):
+            with tab:
+                df = histogram_dataframe(preview_src, filtered_img, channel=channel)
+                colors = {
+                    "輝度": ["#aaaaaa", "#444444"],
+                    "R":    ["#ffaaaa", "#cc0000"],
+                    "G":    ["#aaffaa", "#009900"],
+                    "B":    ["#aaaaff", "#0000cc"],
+                }[channel]
+                st.line_chart(df, color=colors)
 
     st.divider()
 
@@ -348,10 +382,10 @@ if st.session_state.analyzed:
         help="SDカード上のファイル名になります。日本語・スペースは避けてください。",
     )
 
-    flt_bytes = to_flt_bytes(p)
+    flt_bytes = to_flt_bytes(p_blended)
 
     st.download_button(
-        label="📥 フィルターファイル (.flt) をダウンロード",
+        label=f"📥 フィルターファイル (.flt) をダウンロード（強度 {int(st.session_state.strength*100)}%）",
         data=flt_bytes,
         file_name=f"{flt_name}.flt",
         mime="text/plain",

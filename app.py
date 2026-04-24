@@ -4,6 +4,7 @@ pg = st.navigation(
     [
         st.Page("pages/filter_gen.py",     title="📷 フィルターをつくる",  default=True),
         st.Page("pages/preset_builder.py", title="🎞️ プリセットをつくる"),
+        st.Page("pages/compare.py",        title="🔍 フィルターを比較する"),
     ],
     position="sidebar",
 )

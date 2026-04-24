@@ -71,6 +71,24 @@ class FltParams:
                 warnings.append(f"{name} の推定値 {val:.3f} は上限 {hi} にクリッピングされました")
         return warnings
 
+    def blend(self, strength: float) -> "FltParams":
+        """
+        フィルター強度を 0.0〜1.0 で適用。
+        0.0 = すべて 1.0（変化なし）、1.0 = フル適用。
+        各パラメータを 1.0 との間で線形補間する。
+        """
+        s = max(0.0, min(1.0, strength))
+        def _lerp(v): return 1.0 + (v - 1.0) * s
+        return FltParams(
+            brightness=round(_lerp(self.brightness), 3),
+            contrast=round(_lerp(self.contrast), 3),
+            saturation=round(_lerp(self.saturation), 3),
+            hue=round(self.hue * s),
+            gamma_r=round(_lerp(self.gamma_r), 3),
+            gamma_g=round(_lerp(self.gamma_g), 3),
+            gamma_b=round(_lerp(self.gamma_b), 3),
+        )
+
     def to_dict(self) -> dict:
         return {
             "Brightness": self.brightness,
