@@ -491,6 +491,7 @@ if st.session_state.analyzed:
     )
 
     flt_bytes = to_flt_bytes(p_blended)
+    st.caption(f"ダウンロードされるファイル名: **{flt_name}.flt**")
     st.code(flt_bytes.decode(), language="ini")
 
     st.download_button(
