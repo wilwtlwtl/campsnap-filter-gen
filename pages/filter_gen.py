@@ -454,21 +454,23 @@ if st.session_state.analyzed:
                 st.image(apply_filter(preview_src, p_blended), use_container_width=True)
 
     # ── ヒストグラム ──────────────────────────────────────────────────────────
-    with st.expander("📊 色の分布グラフ（ヒストグラム）を見る",
-                     expanded=False, disabled=(preview_src is None)):
-        st.caption("横軸=色の明るさ（左:暗い〜右:明るい）、縦軸=そのピクセルの多さ。")
-        tab_l, tab_r, tab_g, tab_b = st.tabs(["明るさ全体", "赤(R)", "緑(G)", "青(B)"])
-        filtered_img = apply_filter(preview_src, p_blended)
-        for tab, channel in zip([tab_l, tab_r, tab_g, tab_b], ["輝度", "R", "G", "B"]):
-            with tab:
-                df = histogram_dataframe(preview_src, filtered_img, channel=channel)
-                colors = {
-                    "輝度": ["#aaaaaa", "#444444"],
-                    "R":    ["#ffaaaa", "#cc0000"],
-                    "G":    ["#aaffaa", "#009900"],
-                    "B":    ["#aaaaff", "#0000cc"],
-                }[channel]
-                st.line_chart(df, color=colors)
+    with st.expander("📊 色の分布グラフ（ヒストグラム）を見る", expanded=False):
+        if preview_src is None:
+            st.caption("写真をアップロードするとヒストグラムが表示されます。")
+        else:
+            st.caption("横軸=色の明るさ（左:暗い〜右:明るい）、縦軸=そのピクセルの多さ。")
+            tab_l, tab_r, tab_g, tab_b = st.tabs(["明るさ全体", "赤(R)", "緑(G)", "青(B)"])
+            filtered_img = apply_filter(preview_src, p_blended)
+            for tab, channel in zip([tab_l, tab_r, tab_g, tab_b], ["輝度", "R", "G", "B"]):
+                with tab:
+                    df = histogram_dataframe(preview_src, filtered_img, channel=channel)
+                    colors = {
+                        "輝度": ["#aaaaaa", "#444444"],
+                        "R":    ["#ffaaaa", "#cc0000"],
+                        "G":    ["#aaffaa", "#009900"],
+                        "B":    ["#aaaaff", "#0000cc"],
+                    }[channel]
+                    st.line_chart(df, color=colors)
 
     st.divider()
 
