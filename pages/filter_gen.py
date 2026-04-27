@@ -161,6 +161,8 @@ for key, default in [
     ("engine", "高精度モード"),
     ("flt_name", "my_filter"),
     ("preview_img", None),
+    ("_upload_target_id", None),
+    ("_upload_base_id", None),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -231,10 +233,12 @@ uploaded = st.file_uploader(
 )
 
 if uploaded:
-    target_img = Image.open(uploaded).convert("RGB")
-    st.session_state.target_img = target_img
-    st.session_state.analyzed = False   # 再アップ時はリセット
-    st.image(target_img, use_container_width=True)
+    file_id = (uploaded.name, uploaded.size)
+    if st.session_state._upload_target_id != file_id:
+        st.session_state._upload_target_id = file_id
+        st.session_state.target_img = Image.open(uploaded).convert("RGB")
+        st.session_state.analyzed = False   # ファイルが変わったときだけリセット
+    st.image(st.session_state.target_img, use_container_width=True)
 
 with st.expander("📁 V105で撮った写真もあれば、より正確に解析できます（任意）", expanded=False):
     st.caption(
@@ -247,9 +251,12 @@ with st.expander("📁 V105で撮った写真もあれば、より正確に解�
         key="upload_base",
     )
     if base_uploaded:
-        st.session_state.base_img = Image.open(base_uploaded).convert("RGB")
+        file_id = (base_uploaded.name, base_uploaded.size)
+        if st.session_state._upload_base_id != file_id:
+            st.session_state._upload_base_id = file_id
+            st.session_state.base_img = Image.open(base_uploaded).convert("RGB")
+            st.session_state.analyzed = False   # ファイルが変わったときだけリセット
         st.image(st.session_state.base_img, caption="V105の写真（元画像）", use_container_width=True)
-        st.session_state.analyzed = False
 
 st.divider()
 
