@@ -30,5 +30,37 @@
       "stability": 26,
       "description": "Kodak Ektar 100 / 風景写真から生成"
     }
+  },
+  "FujiSuperia400_スナップ": {
+    "params": {
+      "Brightness": 1.003,
+      "Contrast": 1.4,
+      "Saturation": 1.276,
+      "Hue": 0,
+      "GammaR": 0.821,
+      "GammaG": 0.870,
+      "GammaB": 0.803
+    },
+    "meta": {
+      "n_images": 4,
+      "stability": 48,
+      "description": "Fujifilm Superia 400 / 街・スナップ写真から生成"
+    }
+  },
+  "FujiSuperia400_風景": {
+    "params": {
+      "Brightness": 0.991,
+      "Contrast": 1.4,
+      "Saturation": 1.183,
+      "Hue": 0,
+      "GammaR": 0.737,
+      "GammaG": 0.716,
+      "GammaB": 0.697
+    },
+    "meta": {
+      "n_images": 7,
+      "stability": 52,
+      "description": "Fujifilm Superia 400 / 風景写真から生成（リトライ1回で改善）"
+    }
   }
 }
