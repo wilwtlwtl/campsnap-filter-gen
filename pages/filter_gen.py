@@ -322,7 +322,9 @@ if st.session_state.analyzed:
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# STEP 3 – プレビューとダウンロード
+# STEP 3 – 調整 → プレビュー → ダウンロード
+# スライダーをプレビューより前に定義することで、
+# 値の変更が同フレーム内でプレビューに反映される（st.rerun()不要）
 # ════════════════════════════════════════════════════════════════════════════
 
 if st.session_state.analyzed:
@@ -340,11 +342,61 @@ if st.session_state.analyzed:
         help="0% = 変化なし、100% = フル適用。ちょうどよい強さに調整してください。",
     )
     st.session_state.strength = strength / 100
+
+    # ── 細かく調整パネル（プレビューより前に定義）────────────────────────────
+    safety = DEFAULT_SAFETY
+    with st.expander("🔧 自分で細かく調整したい方へ", expanded=False):
+        st.caption(
+            "スライダーを動かすと下のプレビューにすぐ反映されます。"
+        )
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**全体の雰囲気**")
+            brightness = st.slider(
+                "☀️ 明るさ",
+                safety.brightness_min, safety.brightness_max, float(p.brightness), 0.01,
+                help="大きくすると全体が明るく、小さくすると暗くなります。基準値は 1.0。",
+            )
+            contrast = st.slider(
+                "⚡ くっきりさ（コントラスト）",
+                safety.contrast_min, safety.contrast_max, float(p.contrast), 0.01,
+                help="大きくすると明暗のメリハリが増してシャープに。小さくするとふんわり柔らかくなります。",
+            )
+            saturation = st.slider(
+                "🌈 色の鮮やかさ（彩度）",
+                safety.saturation_min, safety.saturation_max, float(p.saturation), 0.01,
+                help="大きくすると色が濃く鮮やかに。小さくすると色が薄くなり、0に近いとほぼモノクロになります。",
+            )
+        with col2:
+            st.markdown("**色のトーン調整**")
+            st.caption("数値が小さいほどそのチャンネルが明るく強調されます（1.0 ＝ 変化なし）。")
+            gamma_r = st.slider(
+                "🔴 赤みの強さ（暖かさ）",
+                safety.gamma_min, safety.gamma_max, float(p.gamma_r), 0.01,
+                help="小さくすると赤みが増して温かい雰囲気に。大きくすると赤みが抑えられます。",
+            )
+            gamma_g = st.slider(
+                "🟢 緑みの強さ（自然さ）",
+                safety.gamma_min, safety.gamma_max, float(p.gamma_g), 0.01,
+                help="小さくすると緑が強調されます。肌色や植物の見え方に影響します。",
+            )
+            gamma_b = st.slider(
+                "🔵 青みの強さ（涼しさ）",
+                safety.gamma_min, safety.gamma_max, float(p.gamma_b), 0.01,
+                help="小さくすると青みが増してクールな印象に。大きくすると青みが抑えられます。",
+            )
+
+    # スライダーの値で params を更新（rerun 不要・同フレームで反映）
+    p = FltParams(
+        brightness=brightness, contrast=contrast, saturation=saturation,
+        hue=0, gamma_r=gamma_r, gamma_g=gamma_g, gamma_b=gamma_b,
+    )
+    st.session_state.params = p
+
+    # 強度ブレンド適用
     p_blended = p.blend(st.session_state.strength)
 
-    if strength < 100:
-        st.caption(f"現在 {strength}% 適用中。スライダーで強さを変えると下のプレビューに即反映されます。")
-
+    # ── プレビュー ────────────────────────────────────────────────────────────
     preview_src = st.session_state.base_img or st.session_state.target_img
     show_sim = st.toggle("📷 V105の実機に近い見え方でシミュレートする", value=False)
 
@@ -363,7 +415,6 @@ if st.session_state.analyzed:
         st.caption(
             "シミュレーションでは、V105特有の粒状感・低解像度感・"
             "明暗の限界・周辺光量落ち・色温度のクセを再現しています。"
-            "実際の写りとは異なる場合があります。"
         )
     else:
         c1, c2 = st.columns(2)
@@ -374,17 +425,12 @@ if st.session_state.analyzed:
             st.caption(f"フィルター適用後（{strength}%）")
             st.image(apply_filter(preview_src, p_blended), use_container_width=True)
 
-    # ── ヒストグラム表示 ──────────────────────────────────────────────────────
+    # ── ヒストグラム ──────────────────────────────────────────────────────────
     with st.expander("📊 色の分布グラフ（ヒストグラム）を見る", expanded=False):
-        st.caption(
-            "横軸は色の明るさ（左 = 暗い、右 = 明るい）、縦軸はその明るさのピクセルの多さです。"
-            "フィルター適用後にグラフがどう変わったか確認できます。"
-        )
+        st.caption("横軸=色の明るさ（左:暗い〜右:明るい）、縦軸=そのピクセルの多さ。")
         tab_l, tab_r, tab_g, tab_b = st.tabs(["明るさ全体", "赤(R)", "緑(G)", "青(B)"])
         filtered_img = apply_filter(preview_src, p_blended)
-        for tab, channel in zip(
-            [tab_l, tab_r, tab_g, tab_b], ["輝度", "R", "G", "B"]
-        ):
+        for tab, channel in zip([tab_l, tab_r, tab_g, tab_b], ["輝度", "R", "G", "B"]):
             with tab:
                 df = histogram_dataframe(preview_src, filtered_img, channel=channel)
                 colors = {
@@ -397,8 +443,7 @@ if st.session_state.analyzed:
 
     st.divider()
 
-    # ── ダウンロード ─────────────────────────────────────────────────────────
-
+    # ── ダウンロード ──────────────────────────────────────────────────────────
     st.subheader("💾 STEP 4 ｜ フィルターをダウンロード")
 
     flt_name = st.text_input(
@@ -408,9 +453,10 @@ if st.session_state.analyzed:
     )
 
     flt_bytes = to_flt_bytes(p_blended)
+    st.code(flt_bytes.decode(), language="ini")
 
     st.download_button(
-        label=f"📥 フィルターファイル (.flt) をダウンロード（強度 {int(st.session_state.strength*100)}%）",
+        label=f"📥 フィルターファイル (.flt) をダウンロード（強度 {strength}%）",
         data=flt_bytes,
         file_name=f"{flt_name}.flt",
         mime="text/plain",
@@ -426,76 +472,9 @@ if st.session_state.analyzed:
 4. SDカードをV105に戻して電源を入れる
 
 **起動時に画面に `CUS` と表示されれば読み込み成功です。**
-フィルター選択でこのフィルターを選んで撮影してみてください。
 """)
 
     st.divider()
-
-    # ════════════════════════════════════════════════════════════════════════
-    # 上級者向け調整パネル（折りたたみ）
-    # ════════════════════════════════════════════════════════════════════════
-
-    with st.expander("🔧 自分で細かく調整したい方へ", expanded=False):
-        st.caption(
-            "自動生成された数値をここで自由に変えられます。"
-            "スライダーを動かすと、上のプレビューにも即座に反映されます。"
-        )
-
-        safety = DEFAULT_SAFETY
-        col1, col2 = st.columns(2)
-
-        with col1:
-            st.markdown("**全体の雰囲気**")
-            brightness = st.slider(
-                "☀️ 明るさ",
-                safety.brightness_min, safety.brightness_max, float(p.brightness), 0.01,
-                help="大きくすると全体が明るく、小さくすると暗くなります。基準値は 1.0。",
-            )
-            contrast = st.slider(
-                "⚡ くっきりさ（コントラスト）",
-                safety.contrast_min, safety.contrast_max, float(p.contrast), 0.01,
-                help="大きくすると明暗のメリハリが増してシャープに。小さくするとふんわり柔らかくなります。",
-            )
-            saturation = st.slider(
-                "🌈 色の鮮やかさ（彩度）",
-                safety.saturation_min, safety.saturation_max, float(p.saturation), 0.01,
-                help="大きくすると色が濃く鮮やかに。小さくすると色が薄くなり、0に近いとほぼモノクロになります。",
-            )
-
-        with col2:
-            st.markdown("**色のトーン調整**")
-            st.caption(
-                "赤・緑・青それぞれの「トーン」を個別に動かせます。"
-                "数値が小さいほどそのチャンネルが明るく強調されます（1.0 ＝ 変化なし）。"
-            )
-            gamma_r = st.slider(
-                "🔴 赤みの強さ（暖かさ）",
-                safety.gamma_min, safety.gamma_max, float(p.gamma_r), 0.01,
-                help="小さくすると赤みが増して温かい雰囲気に。大きくすると赤みが抑えられます。",
-            )
-            gamma_g = st.slider(
-                "🟢 緑みの強さ（自然さ）",
-                safety.gamma_min, safety.gamma_max, float(p.gamma_g), 0.01,
-                help="小さくすると緑が強調されます。肌色や植物の見え方に影響します。",
-            )
-            gamma_b = st.slider(
-                "🔵 青みの強さ（涼しさ）",
-                safety.gamma_min, safety.gamma_max, float(p.gamma_b), 0.01,
-                help="小さくすると青みが増してクールな印象に。大きくすると青みが抑えられます。",
-            )
-
-        adjusted = FltParams(
-            brightness=brightness, contrast=contrast, saturation=saturation,
-            hue=0, gamma_r=gamma_r, gamma_g=gamma_g, gamma_b=gamma_b,
-        )
-
-        # 調整後に適用
-        if adjusted.to_dict() != p.to_dict():
-            st.session_state.params = adjusted
-            st.rerun()
-
-        st.markdown("**生成されるファイルの中身（確認用）**")
-        st.code(to_flt_bytes(p).decode(), language="ini")
 
 
 # ════════════════════════════════════════════════════════════════════════════
