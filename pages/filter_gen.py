@@ -159,6 +159,7 @@ for key, default in [
     ("strength", 1.0),
     ("diag_info", {}),
     ("engine", "高精度モード"),
+    ("flt_name", "my_filter"),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -448,7 +449,7 @@ if st.session_state.analyzed:
 
     flt_name = st.text_input(
         "フィルターの名前（半角英数字推奨）",
-        value="my_filter",
+        key="flt_name",
         help="SDカード上のファイル名になります。日本語・スペースは避けてください。",
     )
 
