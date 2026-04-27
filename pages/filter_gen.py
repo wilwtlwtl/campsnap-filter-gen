@@ -160,6 +160,7 @@ for key, default in [
     ("diag_info", {}),
     ("engine", "高精度モード"),
     ("flt_name", "my_filter"),
+    ("preview_img", None),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -397,37 +398,64 @@ if st.session_state.analyzed:
     # 強度ブレンド適用
     p_blended = p.blend(st.session_state.strength)
 
-    # ── プレビュー ────────────────────────────────────────────────────────────
-    preview_src = st.session_state.base_img or st.session_state.target_img
-    show_sim = st.toggle("📷 V105の実機に近い見え方でシミュレートする", value=False)
-
-    if show_sim:
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.caption("元の写真")
-            st.image(preview_src, use_container_width=True)
-        with c2:
-            st.caption(f"フィルター適用後（{strength}%）")
-            st.image(apply_filter(preview_src, p_blended), use_container_width=True)
-        with c3:
-            st.caption("V105実機シミュレーション")
-            with st.spinner(""):
-                st.image(simulate_v105(preview_src, p_blended), use_container_width=True)
-        st.caption(
-            "シミュレーションでは、V105特有の粒状感・低解像度感・"
-            "明暗の限界・周辺光量落ち・色温度のクセを再現しています。"
+    # ── プレビュー用写真アップロード ──────────────────────────────────────────
+    with st.expander("🖼️ 自分の写真でフィルターを試す（任意）", expanded=False):
+        st.caption("ここに写真をアップすると、そちらにフィルターを適用してプレビューできます。")
+        preview_upload = st.file_uploader(
+            "JPG / PNG をアップロード",
+            type=["jpg", "jpeg", "png"],
+            key="upload_preview",
+            label_visibility="collapsed",
         )
-    else:
-        c1, c2 = st.columns(2)
-        with c1:
-            st.caption("元の写真")
-            st.image(preview_src, use_container_width=True)
-        with c2:
-            st.caption(f"フィルター適用後（{strength}%）")
-            st.image(apply_filter(preview_src, p_blended), use_container_width=True)
+        if preview_upload:
+            st.session_state.preview_img = Image.open(preview_upload).convert("RGB")
+        if st.session_state.preview_img:
+            st.image(st.session_state.preview_img, use_container_width=True)
+            if st.button("✕ この写真を外す", key="clear_preview"):
+                st.session_state.preview_img = None
+
+    # プレビュー対象: アップした写真 > V105写真 > 理想の写真
+    preview_src = (
+        st.session_state.preview_img
+        or st.session_state.base_img
+        or st.session_state.target_img
+    )
+
+    if preview_src is None:
+        st.info("プレビューするには上の「自分の写真でフィルターを試す」か、STEP 1で写真をアップロードしてください。")
+
+    show_sim = st.toggle("📷 V105の実機に近い見え方でシミュレートする", value=False,
+                         disabled=(preview_src is None))
+
+    if preview_src is not None:
+        if show_sim:
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.caption("元の写真")
+                st.image(preview_src, use_container_width=True)
+            with c2:
+                st.caption(f"フィルター適用後（{strength}%）")
+                st.image(apply_filter(preview_src, p_blended), use_container_width=True)
+            with c3:
+                st.caption("V105実機シミュレーション")
+                with st.spinner(""):
+                    st.image(simulate_v105(preview_src, p_blended), use_container_width=True)
+            st.caption(
+                "シミュレーションでは、V105特有の粒状感・低解像度感・"
+                "明暗の限界・周辺光量落ち・色温度のクセを再現しています。"
+            )
+        else:
+            c1, c2 = st.columns(2)
+            with c1:
+                st.caption("元の写真")
+                st.image(preview_src, use_container_width=True)
+            with c2:
+                st.caption(f"フィルター適用後（{strength}%）")
+                st.image(apply_filter(preview_src, p_blended), use_container_width=True)
 
     # ── ヒストグラム ──────────────────────────────────────────────────────────
-    with st.expander("📊 色の分布グラフ（ヒストグラム）を見る", expanded=False):
+    with st.expander("📊 色の分布グラフ（ヒストグラム）を見る",
+                     expanded=False, disabled=(preview_src is None)):
         st.caption("横軸=色の明るさ（左:暗い〜右:明るい）、縦軸=そのピクセルの多さ。")
         tab_l, tab_r, tab_g, tab_b = st.tabs(["明るさ全体", "赤(R)", "緑(G)", "青(B)"])
         filtered_img = apply_filter(preview_src, p_blended)
