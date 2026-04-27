@@ -10,7 +10,8 @@ from PIL import Image
 
 from .analyzer import ImageAnalyzer, FltParams, DEFAULT_SAFETY, SafetyLimits
 
-PRESET_FILE = Path(__file__).parent.parent / "presets.json"
+PRESET_FILE         = Path(__file__).parent.parent / "presets.json"
+DEFAULT_PRESET_FILE = Path(__file__).parent.parent / "default_presets.json"
 
 
 # ── プリセット生成 ──────────────────────────────────────────────────────────
@@ -84,13 +85,23 @@ def _file_writable() -> bool:
 
 
 def load_presets() -> dict[str, dict]:
-    """保存済みプリセットを {名前: params_dict} で返す"""
-    if not PRESET_FILE.exists():
-        return {}
-    try:
-        return json.loads(PRESET_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
+    """
+    保存済みプリセットを {名前: params_dict} で返す。
+    default_presets.json（組み込み）とpresets.json（ユーザー作成）をマージし、
+    同名の場合はユーザー作成側を優先する。
+    """
+    result = {}
+    if DEFAULT_PRESET_FILE.exists():
+        try:
+            result.update(json.loads(DEFAULT_PRESET_FILE.read_text(encoding="utf-8")))
+        except Exception:
+            pass
+    if PRESET_FILE.exists():
+        try:
+            result.update(json.loads(PRESET_FILE.read_text(encoding="utf-8")))
+        except Exception:
+            pass
+    return result
 
 
 def save_preset(name: str, params: FltParams, meta: dict | None = None) -> None:

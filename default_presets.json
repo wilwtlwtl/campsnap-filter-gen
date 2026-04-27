@@ -1,0 +1,34 @@
+{
+  "Ektar100_スナップ": {
+    "params": {
+      "Brightness": 0.987,
+      "Contrast": 1.4,
+      "Saturation": 1.286,
+      "Hue": 0,
+      "GammaR": 0.851,
+      "GammaG": 0.841,
+      "GammaB": 0.812
+    },
+    "meta": {
+      "n_images": 3,
+      "stability": 67,
+      "description": "Kodak Ektar 100 / 街・スナップ写真から生成"
+    }
+  },
+  "Ektar100_風景": {
+    "params": {
+      "Brightness": 1.049,
+      "Contrast": 1.4,
+      "Saturation": 0.888,
+      "Hue": 0,
+      "GammaR": 0.743,
+      "GammaG": 0.972,
+      "GammaB": 0.891
+    },
+    "meta": {
+      "n_images": 3,
+      "stability": 26,
+      "description": "Kodak Ektar 100 / 風景写真から生成"
+    }
+  }
+}
