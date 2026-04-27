@@ -1,5 +1,5 @@
 {
-  "Ektar100_スナップ": {
+  "KodakEktar100_スナップ": {
     "params": {
       "Brightness": 0.987,
       "Contrast": 1.4,
@@ -15,7 +15,7 @@
       "description": "Kodak Ektar 100 / 街・スナップ写真から生成"
     }
   },
-  "Ektar100_風景": {
+  "KodakEktar100_風景": {
     "params": {
       "Brightness": 1.049,
       "Contrast": 1.4,
