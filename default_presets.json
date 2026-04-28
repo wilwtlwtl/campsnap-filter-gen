@@ -159,6 +159,38 @@
       "description": "Kodak Portra 800 / 風景写真から生成"
     }
   },
+  "AgfaVista200_スナップ": {
+    "params": {
+      "Brightness": 0.994,
+      "Contrast": 1.4,
+      "Saturation": 1.500,
+      "Hue": 0,
+      "GammaR": 0.730,
+      "GammaG": 0.699,
+      "GammaB": 0.721
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 73,
+      "description": "Agfa Vista 200 / 街・スナップ写真から生成"
+    }
+  },
+  "AgfaVista200_風景": {
+    "params": {
+      "Brightness": 0.998,
+      "Contrast": 1.4,
+      "Saturation": 1.499,
+      "Hue": 0,
+      "GammaR": 0.676,
+      "GammaG": 0.685,
+      "GammaB": 0.712
+    },
+    "meta": {
+      "n_images": 11,
+      "stability": 55,
+      "description": "Agfa Vista 200 / 風景写真から生成（リトライ2回で改善）"
+    }
+  },
   "LomoLadyGrey400_スナップ": {
     "params": {
       "Brightness": 1.012,

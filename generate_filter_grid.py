@@ -36,10 +36,13 @@ ACCENT    = (170, 145, 80)
 SHORT_NAMES = {
     "KodakEktar100":   "Ektar 100",
     "FujiSuperia400":  "Superia 400",
-    "LomoLadyGrey400": "Lady Grey 400 (B&W)",
     "FujiPro400H":     "Fuji Pro 400H",
     "Cinestill800T":   "Cinestill 800T",
     "KodakPortra800":  "Portra 800",
+    "AgfaVista200":    "Agfa Vista 200",
+    "LomoLadyGrey400": "Lady Grey 400 (B&W)",
+    "KodakTriX400":    "Tri-X 400 (B&W)",
+    "IlfordHP5Plus":   "HP5 Plus (B&W)",
 }
 
 SUFFIX_JP = {
