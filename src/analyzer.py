@@ -18,7 +18,7 @@ class SafetyLimits:
     brightness_max: float = 1.6
     contrast_min: float = 0.6
     contrast_max: float = 1.4
-    saturation_min: float = 0.5
+    saturation_min: float = 0.0
     saturation_max: float = 1.5
     gamma_min: float = 0.5
     gamma_max: float = 1.8
