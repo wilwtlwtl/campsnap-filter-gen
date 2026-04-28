@@ -19,49 +19,29 @@ from src.preset_builder import load_presets, preset_to_flt_params
 from src.histogram import histogram_dataframe
 
 _SNAP_IMG_PATH = Path(__file__).parent.parent / "sample_snap.jpg"
-_LAND_IMG_PATH = Path(__file__).parent.parent / "sample_landscape.jpg"
 _THUMB_SIZE = (300, 200)
 
 
-def _demo_img_for(name: str) -> Path:
-    return _SNAP_IMG_PATH if name.endswith("_スナップ") else _LAND_IMG_PATH
-
-
 def _img_mtime_key() -> str:
-    """画像ファイルの更新時刻をキャッシュキー用文字列として返す。"""
-    ts = []
-    for p in (_SNAP_IMG_PATH, _LAND_IMG_PATH):
-        ts.append(str(p.stat().st_mtime) if p.exists() else "0")
-    return ",".join(ts)
+    return str(_SNAP_IMG_PATH.stat().st_mtime) if _SNAP_IMG_PATH.exists() else "0"
 
 
 @st.cache_data
 def _build_preset_previews(presets_json: str, _img_key: str) -> dict:
-    """
-    全プリセットのサムネイルを生成してキャッシュする。
-    _スナップ 系は sample_snap.jpg、_風景 系は sample_landscape.jpg を使用。
-    _img_key に画像 mtime を含めることで画像差し替え時にキャッシュを自動破棄する。
-    """
     import json
     presets = json.loads(presets_json)
-    bases: dict[str, Image.Image] = {}
-    for path in (_SNAP_IMG_PATH, _LAND_IMG_PATH):
-        if path.exists():
-            bases[path.name] = Image.open(path).convert("RGB").resize(_THUMB_SIZE, Image.LANCZOS)
-    if not bases:
+    if not _SNAP_IMG_PATH.exists():
         return {}
+    base_img = Image.open(_SNAP_IMG_PATH).convert("RGB").resize(_THUMB_SIZE, Image.LANCZOS)
     result = {}
     for name, data in presets.items():
-        img_path = _demo_img_for(name)
-        if img_path.name not in bases:
-            continue
         p_data = data["params"]
         p = FltParams(
             brightness=p_data["Brightness"], contrast=p_data["Contrast"],
             saturation=p_data["Saturation"], hue=p_data.get("Hue", 0),
             gamma_r=p_data["GammaR"], gamma_g=p_data["GammaG"], gamma_b=p_data["GammaB"],
         )
-        result[name] = apply_filter(bases[img_path.name], p)
+        result[name] = apply_filter(base_img, p)
     return result
 
 
@@ -261,14 +241,12 @@ if presets:
     # ── フィルタープレビューギャラリー ──────────────────────────────────────
     import json as _json
     with st.expander("🖼️ フィルタープレビューで比較して選ぶ", expanded=False):
-        if not _SNAP_IMG_PATH.exists() and not _LAND_IMG_PATH.exists():
+        if not _SNAP_IMG_PATH.exists():
             st.warning("プレビュー用のサンプル画像が見つかりません。")
         else:
             st.caption("同じ写真に各フィルターを適用したプレビューです。気に入ったフィルターの「✅ 使う」をクリックしてください。")
             previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False), _img_mtime_key())
             GALLERY_COLS = 3
-            snap_names = [n for n in previews if n.endswith("_スナップ")]
-            land_names = [n for n in previews if n.endswith("_風景")]
 
             def _render_group(names):
                 for row_start in range(0, len(names), GALLERY_COLS):
@@ -286,10 +264,7 @@ if presets:
                                     st.session_state.warnings = []
                                     st.rerun()
 
-            st.markdown("**📷 スナップ**")
-            _render_group(snap_names)
-            st.markdown("**🌄 風景**")
-            _render_group(land_names)
+            _render_group(list(previews.keys()))
 
     st.caption("新しいプリセットを作るには左メニューの「プリセットをつくる」ページへ。")
     st.divider()

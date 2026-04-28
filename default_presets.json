@@ -1,5 +1,5 @@
 {
-  "KodakEktar100_スナップ": {
+  "KodakEktar100": {
     "params": {
       "Brightness": 0.987,
       "Contrast": 1.4,
@@ -15,23 +15,7 @@
       "description": "Kodak Ektar 100 / 街・スナップ写真から生成"
     }
   },
-  "KodakEktar100_風景": {
-    "params": {
-      "Brightness": 1.023,
-      "Contrast": 1.4,
-      "Saturation": 1.500,
-      "Hue": 0,
-      "GammaR": 0.778,
-      "GammaG": 0.697,
-      "GammaB": 0.731
-    },
-    "meta": {
-      "n_images": 7,
-      "stability": 29,
-      "description": "Kodak Ektar 100 / 風景写真から生成（7枚で再解析）"
-    }
-  },
-  "FujiSuperia400_スナップ": {
+  "FujiSuperia400": {
     "params": {
       "Brightness": 0.992,
       "Contrast": 1.4,
@@ -47,167 +31,7 @@
       "description": "Fujifilm Superia 400 / 街・スナップ写真から生成（7枚で再解析）"
     }
   },
-  "FujiSuperia400_風景": {
-    "params": {
-      "Brightness": 0.991,
-      "Contrast": 1.4,
-      "Saturation": 1.183,
-      "Hue": 0,
-      "GammaR": 0.737,
-      "GammaG": 0.716,
-      "GammaB": 0.697
-    },
-    "meta": {
-      "n_images": 7,
-      "stability": 52,
-      "description": "Fujifilm Superia 400 / 風景写真から生成（リトライ1回で改善）"
-    }
-  },
-  "FujiPro400H_スナップ": {
-    "params": {
-      "Brightness": 0.999,
-      "Contrast": 1.393,
-      "Saturation": 1.472,
-      "Hue": 0,
-      "GammaR": 0.795,
-      "GammaG": 0.739,
-      "GammaB": 0.712
-    },
-    "meta": {
-      "n_images": 4,
-      "stability": 56,
-      "description": "Fuji Pro 400H / 街・スナップ写真から生成"
-    }
-  },
-  "FujiPro400H_風景": {
-    "params": {
-      "Brightness": 0.998,
-      "Contrast": 1.400,
-      "Saturation": 1.122,
-      "Hue": 0,
-      "GammaR": 0.843,
-      "GammaG": 0.850,
-      "GammaB": 0.873
-    },
-    "meta": {
-      "n_images": 4,
-      "stability": 53,
-      "description": "Fuji Pro 400H / 風景写真から生成"
-    }
-  },
-  "Cinestill800T_スナップ": {
-    "params": {
-      "Brightness": 1.018,
-      "Contrast": 1.4,
-      "Saturation": 1.5,
-      "Hue": 0,
-      "GammaR": 0.671,
-      "GammaG": 0.663,
-      "GammaB": 0.693
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 59,
-      "description": "Cinestill 800T / 街・スナップ写真から生成"
-    }
-  },
-  "Cinestill800T_風景": {
-    "params": {
-      "Brightness": 1.006,
-      "Contrast": 1.4,
-      "Saturation": 1.5,
-      "Hue": 0,
-      "GammaR": 0.664,
-      "GammaG": 0.668,
-      "GammaB": 0.687
-    },
-    "meta": {
-      "n_images": 8,
-      "stability": 44,
-      "description": "Cinestill 800T / 風景写真から生成（リトライ1回で改善）"
-    }
-  },
-  "KodakPortra800_スナップ": {
-    "params": {
-      "Brightness": 0.999,
-      "Contrast": 1.4,
-      "Saturation": 1.5,
-      "Hue": 0,
-      "GammaR": 0.699,
-      "GammaG": 0.685,
-      "GammaB": 0.548
-    },
-    "meta": {
-      "n_images": 8,
-      "stability": 40,
-      "description": "Kodak Portra 800 / 街・スナップ写真から生成（リトライ1回）"
-    }
-  },
-  "KodakPortra800_風景": {
-    "params": {
-      "Brightness": 1.018,
-      "Contrast": 1.4,
-      "Saturation": 1.470,
-      "Hue": 0,
-      "GammaR": 0.679,
-      "GammaG": 0.702,
-      "GammaB": 0.613
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 53,
-      "description": "Kodak Portra 800 / 風景写真から生成"
-    }
-  },
-  "AgfaVista200_スナップ": {
-    "params": {
-      "Brightness": 0.994,
-      "Contrast": 1.4,
-      "Saturation": 1.500,
-      "Hue": 0,
-      "GammaR": 0.730,
-      "GammaG": 0.699,
-      "GammaB": 0.721
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 73,
-      "description": "Agfa Vista 200 / 街・スナップ写真から生成"
-    }
-  },
-  "AgfaVista200_風景": {
-    "params": {
-      "Brightness": 0.998,
-      "Contrast": 1.4,
-      "Saturation": 1.499,
-      "Hue": 0,
-      "GammaR": 0.676,
-      "GammaG": 0.685,
-      "GammaB": 0.712
-    },
-    "meta": {
-      "n_images": 11,
-      "stability": 55,
-      "description": "Agfa Vista 200 / 風景写真から生成（リトライ2回で改善）"
-    }
-  },
-  "FujiPro160NS_スナップ": {
-    "params": {
-      "Brightness": 1.002,
-      "Contrast": 1.4,
-      "Saturation": 1.336,
-      "Hue": 0,
-      "GammaR": 0.683,
-      "GammaG": 0.722,
-      "GammaB": 0.661
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 46,
-      "description": "Fujifilm Pro 160NS / 街・スナップ写真から生成"
-    }
-  },
-  "FujiPro160NS_風景": {
+  "FujiPro160NS": {
     "params": {
       "Brightness": 0.993,
       "Contrast": 1.4,
@@ -223,7 +47,71 @@
       "description": "Fujifilm Pro 160NS / 風景写真から生成"
     }
   },
-  "LomoLadyGrey400_スナップ": {
+  "FujiPro400H": {
+    "params": {
+      "Brightness": 0.998,
+      "Contrast": 1.400,
+      "Saturation": 1.122,
+      "Hue": 0,
+      "GammaR": 0.843,
+      "GammaG": 0.850,
+      "GammaB": 0.873
+    },
+    "meta": {
+      "n_images": 4,
+      "stability": 53,
+      "description": "Fuji Pro 400H / 風景写真から生成"
+    }
+  },
+  "Cinestill800T": {
+    "params": {
+      "Brightness": 1.018,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.671,
+      "GammaG": 0.663,
+      "GammaB": 0.693
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 59,
+      "description": "Cinestill 800T / 街・スナップ写真から生成"
+    }
+  },
+  "KodakPortra800": {
+    "params": {
+      "Brightness": 1.018,
+      "Contrast": 1.4,
+      "Saturation": 1.470,
+      "Hue": 0,
+      "GammaR": 0.679,
+      "GammaG": 0.702,
+      "GammaB": 0.613
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 53,
+      "description": "Kodak Portra 800 / 風景写真から生成"
+    }
+  },
+  "AgfaVista200": {
+    "params": {
+      "Brightness": 0.994,
+      "Contrast": 1.4,
+      "Saturation": 1.500,
+      "Hue": 0,
+      "GammaR": 0.730,
+      "GammaG": 0.699,
+      "GammaB": 0.721
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 73,
+      "description": "Agfa Vista 200 / 街・スナップ写真から生成"
+    }
+  },
+  "LomoLadyGrey400": {
     "params": {
       "Brightness": 1.012,
       "Contrast": 1.4,
@@ -239,23 +127,7 @@
       "description": "Lomo Lady Grey 400 (B&W) / 街・スナップ写真から生成"
     }
   },
-  "LomoLadyGrey400_風景": {
-    "params": {
-      "Brightness": 1.039,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.944,
-      "GammaG": 0.944,
-      "GammaB": 0.944
-    },
-    "meta": {
-      "n_images": 4,
-      "stability": 49,
-      "description": "Lomo Lady Grey 400 (B&W) / 風景写真から生成"
-    }
-  },
-  "KodakTriX400_スナップ": {
+  "KodakTriX400": {
     "params": {
       "Brightness": 0.996,
       "Contrast": 1.4,
@@ -271,23 +143,7 @@
       "description": "Kodak Tri-X 400 (B&W) / 街・スナップ写真から生成"
     }
   },
-  "KodakTriX400_風景": {
-    "params": {
-      "Brightness": 1.004,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.738,
-      "GammaG": 0.738,
-      "GammaB": 0.738
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 48,
-      "description": "Kodak Tri-X 400 (B&W) / 風景写真から生成"
-    }
-  },
-  "IlfordHP5Plus_スナップ": {
+  "IlfordHP5Plus": {
     "params": {
       "Brightness": 0.990,
       "Contrast": 1.4,
@@ -301,22 +157,6 @@
       "n_images": 5,
       "stability": 67,
       "description": "Ilford HP5 Plus (B&W) / 街・スナップ写真から生成"
-    }
-  },
-  "IlfordHP5Plus_風景": {
-    "params": {
-      "Brightness": 0.992,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.775,
-      "GammaG": 0.775,
-      "GammaB": 0.775
-    },
-    "meta": {
-      "n_images": 5,
-      "stability": 48,
-      "description": "Ilford HP5 Plus (B&W) / 風景写真から生成"
     }
   }
 }
