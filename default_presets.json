@@ -191,6 +191,38 @@
       "description": "Agfa Vista 200 / 風景写真から生成（リトライ2回で改善）"
     }
   },
+  "FujiPro160NS_スナップ": {
+    "params": {
+      "Brightness": 1.002,
+      "Contrast": 1.4,
+      "Saturation": 1.336,
+      "Hue": 0,
+      "GammaR": 0.683,
+      "GammaG": 0.722,
+      "GammaB": 0.661
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 46,
+      "description": "Fujifilm Pro 160NS / 街・スナップ写真から生成"
+    }
+  },
+  "FujiPro160NS_風景": {
+    "params": {
+      "Brightness": 0.993,
+      "Contrast": 1.4,
+      "Saturation": 1.126,
+      "Hue": 0,
+      "GammaR": 0.658,
+      "GammaG": 0.742,
+      "GammaB": 0.723
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 63,
+      "description": "Fujifilm Pro 160NS / 風景写真から生成"
+    }
+  },
   "LomoLadyGrey400_スナップ": {
     "params": {
       "Brightness": 1.012,
