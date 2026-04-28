@@ -103,7 +103,9 @@ def draw_text_centered(draw, text, font, x, y, w, h, color):
 
 def main():
     presets = json.loads(PRESET_FILE.read_text(encoding="utf-8"))
-    keys = list(presets.keys())
+    snap_keys = [k for k in presets if k.endswith("_スナップ")]
+    land_keys = [k for k in presets if k.endswith("_風景")]
+    keys = snap_keys + land_keys
     n = len(keys)
     rows = (n + COLS - 1) // COLS
 

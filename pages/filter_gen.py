@@ -258,21 +258,29 @@ if presets:
             st.caption("同じ写真に各フィルターを適用したプレビューです。気に入ったフィルターの「✅ 使う」をクリックしてください。")
             previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False))
             GALLERY_COLS = 3
-            names = list(previews.keys())
-            for row_start in range(0, len(names), GALLERY_COLS):
-                row_names = names[row_start:row_start + GALLERY_COLS]
-                cols = st.columns(GALLERY_COLS)
-                for col, name in zip(cols, row_names):
-                    with col:
-                        st.image(previews[name], use_container_width=True)
-                        st.caption(name)
-                        if st.button("✅ 使う", key=f"gallery_btn_{name}", use_container_width=True):
-                            p = preset_to_flt_params(name)
-                            if p:
-                                st.session_state.params   = p
-                                st.session_state.analyzed = True
-                                st.session_state.warnings = []
-                                st.rerun()
+            snap_names = [n for n in previews if n.endswith("_スナップ")]
+            land_names = [n for n in previews if n.endswith("_風景")]
+
+            def _render_group(names):
+                for row_start in range(0, len(names), GALLERY_COLS):
+                    row_names = names[row_start:row_start + GALLERY_COLS]
+                    cols = st.columns(GALLERY_COLS)
+                    for col, name in zip(cols, row_names):
+                        with col:
+                            st.image(previews[name], use_container_width=True)
+                            st.caption(name)
+                            if st.button("✅ 使う", key=f"gallery_btn_{name}", use_container_width=True):
+                                p = preset_to_flt_params(name)
+                                if p:
+                                    st.session_state.params   = p
+                                    st.session_state.analyzed = True
+                                    st.session_state.warnings = []
+                                    st.rerun()
+
+            st.markdown("**📷 スナップ**")
+            _render_group(snap_names)
+            st.markdown("**🌄 風景**")
+            _render_group(land_names)
 
     st.caption("新しいプリセットを作るには左メニューの「プリセットをつくる」ページへ。")
     st.divider()
