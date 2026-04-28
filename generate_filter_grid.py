@@ -125,7 +125,7 @@ def main():
     font_title  = get_font(18)
     font_label  = get_font(14)
 
-    title = "CampSnap V105  |  Filter Presets  (12 kinds)"
+    title = f"CampSnap V105  |  Filter Presets  ({n} kinds)"
     draw_text_centered(draw, title, font_title, 0, 0, total_w, HEADER_H - 3, HEADER_FG)
 
     # フィルターセル
