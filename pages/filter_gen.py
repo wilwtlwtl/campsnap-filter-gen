@@ -252,8 +252,8 @@ if presets:
     # ── フィルタープレビューギャラリー ──────────────────────────────────────
     import json as _json
     with st.expander("🖼️ フィルタープレビューで比較して選ぶ", expanded=False):
-        if not _DEMO_IMG_PATH.exists():
-            st.warning("プレビュー用のサンプル画像（sample_base.jpg）が見つかりません。")
+        if not _SNAP_IMG_PATH.exists() and not _LAND_IMG_PATH.exists():
+            st.warning("プレビュー用のサンプル画像が見つかりません。")
         else:
             st.caption("同じ写真に各フィルターを適用したプレビューです。気に入ったフィルターの「✅ 使う」をクリックしてください。")
             previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False))
