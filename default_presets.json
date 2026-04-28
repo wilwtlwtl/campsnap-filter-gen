@@ -67,7 +67,7 @@
     "params": {
       "Brightness": 1.012,
       "Contrast": 1.4,
-      "Saturation": 0.976,
+      "Saturation": 0.0,
       "Hue": 0,
       "GammaR": 0.786,
       "GammaG": 0.786,
@@ -83,7 +83,7 @@
     "params": {
       "Brightness": 1.039,
       "Contrast": 1.4,
-      "Saturation": 1.002,
+      "Saturation": 0.0,
       "Hue": 0,
       "GammaR": 0.944,
       "GammaG": 0.944,
