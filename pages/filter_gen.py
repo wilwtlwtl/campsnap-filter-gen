@@ -18,30 +18,41 @@ from src.preview import apply_filter, simulate_v105
 from src.preset_builder import load_presets, preset_to_flt_params
 from src.histogram import histogram_dataframe
 
-_DEMO_IMG_PATH = Path(__file__).parent.parent / "sample_base.jpg"
+_SNAP_IMG_PATH = Path(__file__).parent.parent / "sample_snap.jpg"
+_LAND_IMG_PATH = Path(__file__).parent.parent / "sample_landscape.jpg"
 _THUMB_SIZE = (300, 200)
+
+
+def _demo_img_for(name: str) -> Path:
+    return _SNAP_IMG_PATH if name.endswith("_スナップ") else _LAND_IMG_PATH
 
 
 @st.cache_data
 def _build_preset_previews(presets_json: str) -> dict:
     """
     全プリセットのサムネイルを生成してキャッシュする。
-    presets_json が変わると（新プリセット追加時など）自動で再生成される。
+    _スナップ 系は sample_snap.jpg、_風景 系は sample_landscape.jpg を使用。
     """
     import json
     presets = json.loads(presets_json)
-    if not _DEMO_IMG_PATH.exists():
+    bases: dict[str, Image.Image] = {}
+    for path in (_SNAP_IMG_PATH, _LAND_IMG_PATH):
+        if path.exists():
+            bases[path.name] = Image.open(path).convert("RGB").resize(_THUMB_SIZE, Image.LANCZOS)
+    if not bases:
         return {}
-    demo = Image.open(_DEMO_IMG_PATH).convert("RGB").resize(_THUMB_SIZE, Image.LANCZOS)
     result = {}
     for name, data in presets.items():
+        img_path = _demo_img_for(name)
+        if img_path.name not in bases:
+            continue
         p_data = data["params"]
         p = FltParams(
             brightness=p_data["Brightness"], contrast=p_data["Contrast"],
             saturation=p_data["Saturation"], hue=p_data.get("Hue", 0),
             gamma_r=p_data["GammaR"], gamma_g=p_data["GammaG"], gamma_b=p_data["GammaB"],
         )
-        result[name] = apply_filter(demo, p)
+        result[name] = apply_filter(bases[img_path.name], p)
     return result
 
 

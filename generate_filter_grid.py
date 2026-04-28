@@ -14,7 +14,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from src.preview import apply_filter
 from src.analyzer import FltParams
 
-BASE_IMAGE  = Path(__file__).parent / "sample_base.jpg"
+SNAP_IMAGE  = Path(__file__).parent / "sample_snap.jpg"
+LAND_IMAGE  = Path(__file__).parent / "sample_landscape.jpg"
 PRESET_FILE = Path(__file__).parent / "default_presets.json"
 OUTPUT_FILE = Path(__file__).parent / "filter_preview_grid.png"
 
@@ -106,7 +107,8 @@ def main():
     n = len(keys)
     rows = (n + COLS - 1) // COLS
 
-    base = crop_center(Image.open(BASE_IMAGE).convert("RGB"), CELL_W, CELL_H)
+    base_snap = crop_center(Image.open(SNAP_IMAGE).convert("RGB"), CELL_W, CELL_H)
+    base_land = crop_center(Image.open(LAND_IMAGE).convert("RGB"), CELL_W, CELL_H)
 
     total_w = PAD + COLS * (CELL_W + PAD)
     total_h = HEADER_H + PAD + rows * (CELL_H + LABEL_H + PAD)
@@ -131,6 +133,7 @@ def main():
         x = PAD + col * (CELL_W + PAD)
         y = HEADER_H + PAD + row * (CELL_H + LABEL_H + PAD)
 
+        base = base_snap if key.endswith("_スナップ") else base_land
         params = load_params(presets[key])
         filtered = apply_filter(base, params)
         grid.paste(filtered, (x, y))
