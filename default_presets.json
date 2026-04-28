@@ -127,4 +127,36 @@
       "description": "Fuji Pro 400H / 風景写真から生成"
     }
   },
+  "Cinestill800T_スナップ": {
+    "params": {
+      "Brightness": 1.018,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.671,
+      "GammaG": 0.663,
+      "GammaB": 0.693
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 59,
+      "description": "Cinestill 800T / 街・スナップ写真から生成"
+    }
+  },
+  "Cinestill800T_風景": {
+    "params": {
+      "Brightness": 1.006,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.664,
+      "GammaG": 0.668,
+      "GammaB": 0.687
+    },
+    "meta": {
+      "n_images": 8,
+      "stability": 44,
+      "description": "Cinestill 800T / 風景写真から生成（リトライ1回で改善）"
+    }
+  }
 }
