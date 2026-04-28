@@ -27,11 +27,20 @@ def _demo_img_for(name: str) -> Path:
     return _SNAP_IMG_PATH if name.endswith("_スナップ") else _LAND_IMG_PATH
 
 
+def _img_mtime_key() -> str:
+    """画像ファイルの更新時刻をキャッシュキー用文字列として返す。"""
+    ts = []
+    for p in (_SNAP_IMG_PATH, _LAND_IMG_PATH):
+        ts.append(str(p.stat().st_mtime) if p.exists() else "0")
+    return ",".join(ts)
+
+
 @st.cache_data
-def _build_preset_previews(presets_json: str) -> dict:
+def _build_preset_previews(presets_json: str, _img_key: str) -> dict:
     """
     全プリセットのサムネイルを生成してキャッシュする。
     _スナップ 系は sample_snap.jpg、_風景 系は sample_landscape.jpg を使用。
+    _img_key に画像 mtime を含めることで画像差し替え時にキャッシュを自動破棄する。
     """
     import json
     presets = json.loads(presets_json)
@@ -256,7 +265,7 @@ if presets:
             st.warning("プレビュー用のサンプル画像が見つかりません。")
         else:
             st.caption("同じ写真に各フィルターを適用したプレビューです。気に入ったフィルターの「✅ 使う」をクリックしてください。")
-            previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False))
+            previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False), _img_mtime_key())
             GALLERY_COLS = 3
             snap_names = [n for n in previews if n.endswith("_スナップ")]
             land_names = [n for n in previews if n.endswith("_風景")]
