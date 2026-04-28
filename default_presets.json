@@ -158,5 +158,37 @@
       "stability": 44,
       "description": "Cinestill 800T / 風景写真から生成（リトライ1回で改善）"
     }
+  },
+  "KodakPortra800_スナップ": {
+    "params": {
+      "Brightness": 0.999,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.699,
+      "GammaG": 0.685,
+      "GammaB": 0.548
+    },
+    "meta": {
+      "n_images": 8,
+      "stability": 40,
+      "description": "Kodak Portra 800 / 街・スナップ写真から生成（リトライ1回）"
+    }
+  },
+  "KodakPortra800_風景": {
+    "params": {
+      "Brightness": 1.018,
+      "Contrast": 1.4,
+      "Saturation": 1.470,
+      "Hue": 0,
+      "GammaR": 0.679,
+      "GammaG": 0.702,
+      "GammaB": 0.613
+    },
+    "meta": {
+      "n_images": 5,
+      "stability": 53,
+      "description": "Kodak Portra 800 / 風景写真から生成"
+    }
   }
 }
