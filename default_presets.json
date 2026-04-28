@@ -63,38 +63,6 @@
       "description": "Fujifilm Superia 400 / 風景写真から生成（リトライ1回で改善）"
     }
   },
-  "LomoLadyGrey400_スナップ": {
-    "params": {
-      "Brightness": 1.012,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.786,
-      "GammaG": 0.786,
-      "GammaB": 0.786
-    },
-    "meta": {
-      "n_images": 4,
-      "stability": 53,
-      "description": "Lomo Lady Grey 400 (B&W) / 街・スナップ写真から生成"
-    }
-  },
-  "LomoLadyGrey400_風景": {
-    "params": {
-      "Brightness": 1.039,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.944,
-      "GammaG": 0.944,
-      "GammaB": 0.944
-    },
-    "meta": {
-      "n_images": 4,
-      "stability": 49,
-      "description": "Lomo Lady Grey 400 (B&W) / 風景写真から生成"
-    }
-  },
   "FujiPro400H_スナップ": {
     "params": {
       "Brightness": 0.999,
@@ -189,6 +157,38 @@
       "n_images": 5,
       "stability": 53,
       "description": "Kodak Portra 800 / 風景写真から生成"
+    }
+  },
+  "LomoLadyGrey400_スナップ": {
+    "params": {
+      "Brightness": 1.012,
+      "Contrast": 1.4,
+      "Saturation": 0.0,
+      "Hue": 0,
+      "GammaR": 0.786,
+      "GammaG": 0.786,
+      "GammaB": 0.786
+    },
+    "meta": {
+      "n_images": 4,
+      "stability": 53,
+      "description": "Lomo Lady Grey 400 (B&W) / 街・スナップ写真から生成"
+    }
+  },
+  "LomoLadyGrey400_風景": {
+    "params": {
+      "Brightness": 1.039,
+      "Contrast": 1.4,
+      "Saturation": 0.0,
+      "Hue": 0,
+      "GammaR": 0.944,
+      "GammaG": 0.944,
+      "GammaB": 0.944
+    },
+    "meta": {
+      "n_images": 4,
+      "stability": 49,
+      "description": "Lomo Lady Grey 400 (B&W) / 風景写真から生成"
     }
   },
   "KodakTriX400_スナップ": {
