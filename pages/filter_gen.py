@@ -6,6 +6,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import sys, os
+from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -16,6 +17,32 @@ from src.flt_io import to_flt_bytes, load_flt
 from src.preview import apply_filter, simulate_v105
 from src.preset_builder import load_presets, preset_to_flt_params
 from src.histogram import histogram_dataframe
+
+_DEMO_IMG_PATH = Path(__file__).parent.parent / "sample_base.jpg"
+_THUMB_SIZE = (300, 200)
+
+
+@st.cache_data
+def _build_preset_previews(presets_json: str) -> dict:
+    """
+    全プリセットのサムネイルを生成してキャッシュする。
+    presets_json が変わると（新プリセット追加時など）自動で再生成される。
+    """
+    import json
+    presets = json.loads(presets_json)
+    if not _DEMO_IMG_PATH.exists():
+        return {}
+    demo = Image.open(_DEMO_IMG_PATH).convert("RGB").resize(_THUMB_SIZE, Image.LANCZOS)
+    result = {}
+    for name, data in presets.items():
+        p_data = data["params"]
+        p = FltParams(
+            brightness=p_data["Brightness"], contrast=p_data["Contrast"],
+            saturation=p_data["Saturation"], hue=p_data.get("Hue", 0),
+            gamma_r=p_data["GammaR"], gamma_g=p_data["GammaG"], gamma_b=p_data["GammaB"],
+        )
+        result[name] = apply_filter(demo, p)
+    return result
 
 
 # ── スタイル ────────────────────────────────────────────────────────────────
@@ -210,6 +237,31 @@ if presets:
                     st.session_state.analyzed = True
                     st.session_state.warnings = []
                     st.rerun()
+
+    # ── フィルタープレビューギャラリー ──────────────────────────────────────
+    import json as _json
+    with st.expander("🖼️ フィルタープレビューで比較して選ぶ", expanded=False):
+        if not _DEMO_IMG_PATH.exists():
+            st.warning("プレビュー用のサンプル画像（sample_base.jpg）が見つかりません。")
+        else:
+            st.caption("同じ写真に各フィルターを適用したプレビューです。気に入ったフィルターの「✅ 使う」をクリックしてください。")
+            previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False))
+            GALLERY_COLS = 3
+            names = list(previews.keys())
+            for row_start in range(0, len(names), GALLERY_COLS):
+                row_names = names[row_start:row_start + GALLERY_COLS]
+                cols = st.columns(GALLERY_COLS)
+                for col, name in zip(cols, row_names):
+                    with col:
+                        st.image(previews[name], use_container_width=True)
+                        st.caption(name)
+                        if st.button("✅ 使う", key=f"gallery_btn_{name}", use_container_width=True):
+                            p = preset_to_flt_params(name)
+                            if p:
+                                st.session_state.params   = p
+                                st.session_state.analyzed = True
+                                st.session_state.warnings = []
+                                st.rerun()
 
     st.caption("新しいプリセットを作るには左メニューの「プリセットをつくる」ページへ。")
     st.divider()
