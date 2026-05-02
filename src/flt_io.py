@@ -51,13 +51,17 @@ def _build_flt_text(params: FltParams) -> str:
 
     matrix = _saturation_matrix(params.saturation)
     for row in matrix:
-        lines.append(", ".join(str(int(round(v * 1000))) for v in row))
+        lines.append(", ".join(str(_clamp_int(v * 1000, -999, 999)) for v in row))
 
     for ch_gamma in (params.gamma_r, params.gamma_g, params.gamma_b):
         curve = _tone_curve(params.brightness, params.contrast, ch_gamma)
         lines.append(", ".join(str(int(v)) for v in curve))
 
-    return "\r\n".join(lines) + "\r\n"
+    return "\n".join(lines)
+
+
+def _clamp_int(v: float, lo: int, hi: int) -> int:
+    return max(lo, min(hi, int(round(v))))
 
 
 def _saturation_matrix(s: float) -> list[list[float]]:
@@ -73,11 +77,27 @@ def _saturation_matrix(s: float) -> list[list[float]]:
 
 
 def _tone_curve(brightness: float, contrast: float, gamma: float) -> list[int]:
+    """
+    公式 .flt の出力に合わせた近似式：
+      base_a = 255*(1-contrast)/2 + brightness_int    （黒レベル基準）
+      base_b = 255 - 255*(1-contrast)/2               （白レベル基準）
+      gamma_shift_a = (gamma - 1.0) * 50              （Gamma による黒レベルのシフト）
+      gamma_shift_b = (gamma - 1.0) * 7               （Gamma による白レベルのシフト）
+      a = base_a + gamma_shift_a
+      b = base_b + gamma_shift_b
+      y = a + (b-a) * (i/255)^gamma                   （指数は gamma そのもの）
+    """
+    brightness_int = int(round((brightness - 1.0) * 100))
+    margin = 255.0 * (1.0 - contrast) / 2.0
+    base_a = margin + brightness_int
+    base_b = 255.0 - margin
+    g = max(gamma, 0.01)
+    a = base_a + (g - 1.0) * 50.0
+    b = base_b + (g - 1.0) * 7.0
+
     x = np.arange(256) / 255.0
-    y = np.power(x, 1.0 / max(gamma, 0.01))
-    y = y * brightness
-    y = (y - 0.5) * contrast + 0.5
-    y = np.clip(y, 0, 1) * 255
+    y = a + (b - a) * np.power(x, g)
+    y = np.clip(y, 0, 255)
     return np.round(y).astype(int).tolist()
 
 
