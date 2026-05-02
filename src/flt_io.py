@@ -5,8 +5,18 @@ Camp Snap V105 独自フォーマット（CSV形式）に対応。
 ファイル構造:
   行1: 7つのパラメータ
         Brightness(整数 = (倍率-1)*100), Contrast, Saturation, Hue, GammaR, GammaG, GammaB
-  行2-4: 3x3 RGBカラーマトリックス（×1000の整数）
+  行2-4: 3x3 RGBカラーマトリックス（×1024 の符号付き整数 = 10bit固定小数）
   行5-7: 各チャンネル256要素のトーンカーブ（0〜255）
+  改行 LF, 末尾改行なし, BOMなし
+
+公式の初期値ファイル例（Brightness=0, Contrast=1, Saturation=1, Hue=0, Gamma=1）:
+  0, 1, 1, 0, 1, 1, 1
+  1024, 0, 0
+  0, 1024, 0
+  0, 0, 1024
+  0, 1, 2, ..., 255  (R)
+  0, 1, 2, ..., 255  (G)
+  0, 1, 2, ..., 255  (B)
 """
 
 import numpy as np
@@ -51,7 +61,7 @@ def _build_flt_text(params: FltParams) -> str:
 
     matrix = _saturation_matrix(params.saturation)
     for row in matrix:
-        lines.append(", ".join(str(_clamp_int(v * 1000, -999, 999)) for v in row))
+        lines.append(", ".join(str(_clamp_int(v * 1024, -2048, 2047)) for v in row))
 
     for ch_gamma in (params.gamma_r, params.gamma_g, params.gamma_b):
         curve = _tone_curve(params.brightness, params.contrast, ch_gamma)
