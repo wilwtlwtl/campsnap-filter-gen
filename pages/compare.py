@@ -106,7 +106,7 @@ for row in rows:
                     label="📥 ダウンロード",
                     data=flt_bytes,
                     file_name=f"{preset_name.replace(' ','_')}.flt",
-                    mime="text/plain",
+                    mime="application/octet-stream",
                     use_container_width=True,
                     key=f"dl_{preset_name}",
                 )

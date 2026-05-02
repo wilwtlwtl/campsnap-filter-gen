@@ -188,7 +188,7 @@ if st.button(
             label="📥 .flt ファイルをダウンロード",
             data=flt_bytes,
             file_name=f"{preset_name.replace(' ', '_')}.flt",
-            mime="text/plain",
+            mime="application/octet-stream",
             use_container_width=True,
         )
 

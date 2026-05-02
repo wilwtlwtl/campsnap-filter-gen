@@ -553,7 +553,7 @@ if st.session_state.analyzed:
         label=f"📥 フィルターファイル (.flt) をダウンロード（強度 {strength}%）",
         data=flt_bytes,
         file_name=f"{flt_name}.flt",
-        mime="text/plain",
+        mime="application/octet-stream",
         use_container_width=True,
         type="primary",
     )
