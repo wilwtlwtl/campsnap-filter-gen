@@ -544,15 +544,16 @@ if st.session_state.analyzed:
         key="flt_name",
         help="SDカード上のファイル名になります。日本語・スペースは避けてください。",
     )
+    final_name = flt_name.strip() or "my_filter"
 
     flt_bytes = to_flt_bytes(p_blended)
-    st.caption(f"ダウンロードされるファイル名: **{flt_name}.flt**")
+    st.caption(f"ダウンロードされるファイル名: **{final_name}.flt**")
     st.code(flt_bytes.decode(), language="ini")
 
     st.download_button(
         label=f"📥 フィルターファイル (.flt) をダウンロード（強度 {strength}%）",
         data=flt_bytes,
-        file_name=f"{flt_name}.flt",
+        file_name=f"{final_name}.flt",
         mime="application/octet-stream",
         use_container_width=True,
         type="primary",

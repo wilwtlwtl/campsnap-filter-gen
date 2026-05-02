@@ -108,10 +108,11 @@ for row in rows:
                     key=f"name_{preset_name}",
                     label_visibility="collapsed",
                 )
+                final_name = custom_name.strip() or preset_name.replace(' ', '_')
                 st.download_button(
                     label="📥 ダウンロード",
                     data=flt_bytes,
-                    file_name=f"{custom_name}.flt",
+                    file_name=f"{final_name}.flt",
                     mime="application/octet-stream",
                     use_container_width=True,
                     key=f"dl_{preset_name}",

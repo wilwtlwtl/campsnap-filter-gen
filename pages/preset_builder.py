@@ -189,10 +189,11 @@ if st.button(
             value=preset_name.replace(' ', '_'),
             key="dl_filename_input",
         )
+        final_name = custom_name.strip() or preset_name.replace(' ', '_')
         st.download_button(
             label="📥 .flt ファイルをダウンロード",
             data=flt_bytes,
-            file_name=f"{custom_name}.flt",
+            file_name=f"{final_name}.flt",
             mime="application/octet-stream",
             use_container_width=True,
         )
