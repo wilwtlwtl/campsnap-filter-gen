@@ -38,15 +38,15 @@ def load_flt(source) -> FltParams:
 def _build_flt_text(params: FltParams) -> str:
     lines = [
         "[Filter]",
-        f"Brightness={params.brightness}",
-        f"Contrast={params.contrast}",
-        f"Saturation={params.saturation}",
-        f"Hue={params.hue}",
-        f"GammaR={params.gamma_r}",
-        f"GammaG={params.gamma_g}",
-        f"GammaB={params.gamma_b}",
+        f"Brightness={params.brightness:.3f}",
+        f"Contrast={params.contrast:.3f}",
+        f"Saturation={params.saturation:.3f}",
+        f"Hue={int(params.hue)}",
+        f"GammaR={params.gamma_r:.3f}",
+        f"GammaG={params.gamma_g:.3f}",
+        f"GammaB={params.gamma_b:.3f}",
     ]
-    return "\n".join(lines) + "\n"
+    return "\r\n".join(lines) + "\r\n"
 
 
 def _parse_flt_text(text: str) -> FltParams:
