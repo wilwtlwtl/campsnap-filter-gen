@@ -102,10 +102,16 @@ for row in rows:
                     st.caption(f"参考画像 {meta['n_images']}枚")
                 p = preset_to_flt_params(preset_name)
                 flt_bytes = to_flt_bytes(p)
+                custom_name = st.text_input(
+                    "ファイル名",
+                    value=preset_name.replace(' ', '_'),
+                    key=f"name_{preset_name}",
+                    label_visibility="collapsed",
+                )
                 st.download_button(
                     label="📥 ダウンロード",
                     data=flt_bytes,
-                    file_name=f"{preset_name.replace(' ','_')}.flt",
+                    file_name=f"{custom_name}.flt",
                     mime="application/octet-stream",
                     use_container_width=True,
                     key=f"dl_{preset_name}",

@@ -184,10 +184,15 @@ if st.button(
 
     with col_dl:
         flt_bytes = to_flt_bytes(params)
+        custom_name = st.text_input(
+            "ファイル名（半角英数字推奨）",
+            value=preset_name.replace(' ', '_'),
+            key="dl_filename_input",
+        )
         st.download_button(
             label="📥 .flt ファイルをダウンロード",
             data=flt_bytes,
-            file_name=f"{preset_name.replace(' ', '_')}.flt",
+            file_name=f"{custom_name}.flt",
             mime="application/octet-stream",
             use_container_width=True,
         )
