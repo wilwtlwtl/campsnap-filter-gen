@@ -59,12 +59,12 @@ def _build_flt_text(params: FltParams) -> str:
     )
     lines.append(line1)
 
-    matrix = _saturation_matrix(params.saturation)
+    matrix = build_color_matrix(params.saturation, params.hue)
     for row in matrix:
         lines.append(", ".join(str(_clamp_int(v * 1024, -2048, 2047)) for v in row))
 
     for ch_gamma in (params.gamma_r, params.gamma_g, params.gamma_b):
-        curve = _tone_curve(params.brightness, params.contrast, ch_gamma)
+        curve = build_tone_curve(params.brightness, params.contrast, ch_gamma)
         lines.append(", ".join(str(int(v)) for v in curve))
 
     return "\n".join(lines)
@@ -74,28 +74,53 @@ def _clamp_int(v: float, lo: int, hi: int) -> int:
     return max(lo, min(hi, int(round(v))))
 
 
-def _saturation_matrix(s: float) -> list[list[float]]:
+def build_color_matrix(saturation: float, hue_deg: float = 0.0) -> np.ndarray:
+    """
+    彩度マトリックス × 色相回転マトリックスの合成 3x3 RGB変換行列を返す。
+    hue_deg = 0 のときは純粋な彩度マトリックス。
+    """
     lr, lg, lb = 0.3086, 0.6094, 0.0820
+    s = saturation
     sr = (1 - s) * lr
     sg = (1 - s) * lg
     sb = (1 - s) * lb
-    return [
+    sat_mat = np.array([
         [sr + s, sg, sb],
         [sr, sg + s, sb],
         [sr, sg, sb + s],
-    ]
+    ])
+
+    if hue_deg == 0:
+        return sat_mat
+
+    a = np.deg2rad(hue_deg)
+    cos_a = np.cos(a)
+    sin_a = np.sin(a)
+    hue_mat = np.array([
+        [0.299 + 0.701 * cos_a + 0.168 * sin_a,
+         0.587 - 0.587 * cos_a + 0.330 * sin_a,
+         0.114 - 0.114 * cos_a - 0.497 * sin_a],
+        [0.299 - 0.299 * cos_a - 0.328 * sin_a,
+         0.587 + 0.413 * cos_a + 0.035 * sin_a,
+         0.114 - 0.114 * cos_a + 0.292 * sin_a],
+        [0.299 - 0.300 * cos_a + 1.250 * sin_a,
+         0.587 - 0.588 * cos_a - 1.050 * sin_a,
+         0.114 + 0.886 * cos_a - 0.203 * sin_a],
+    ])
+
+    return sat_mat @ hue_mat
 
 
-def _tone_curve(brightness: float, contrast: float, gamma: float) -> list[int]:
+def build_tone_curve(brightness: float, contrast: float, gamma: float) -> list[int]:
     """
-    公式 .flt の出力に合わせた近似式：
-      base_a = 255*(1-contrast)/2 + brightness_int    （黒レベル基準）
-      base_b = 255 - 255*(1-contrast)/2               （白レベル基準）
-      gamma_shift_a = (gamma - 1.0) * 50              （Gamma による黒レベルのシフト）
-      gamma_shift_b = (gamma - 1.0) * 7               （Gamma による白レベルのシフト）
-      a = base_a + gamma_shift_a
-      b = base_b + gamma_shift_b
-      y = a + (b-a) * (i/255)^gamma                   （指数は gamma そのもの）
+    Brightness, Contrast, Gamma から256要素のトーンカーブを生成。
+      base_a = 255*(1-contrast)/2 + brightness_int
+      base_b = 255 - 255*(1-contrast)/2
+      a = base_a + (gamma - 1) * 50            （黒レベル：Gammaシフト）
+      b = base_b + (gamma - 1) * 7             （白レベル：Gammaシフト）
+      core(x) = a + (b - a) * x^gamma          （ガンマカーブ）
+      midtone_dip(x) = sin(π * x) * (1 - contrast) * 320   （contrast<1 で中央が凹む）
+      y = core(x) - midtone_dip(x)
     """
     brightness_int = int(round((brightness - 1.0) * 100))
     margin = 255.0 * (1.0 - contrast) / 2.0
@@ -106,7 +131,9 @@ def _tone_curve(brightness: float, contrast: float, gamma: float) -> list[int]:
     b = base_b + (g - 1.0) * 7.0
 
     x = np.arange(256) / 255.0
-    y = a + (b - a) * np.power(x, g)
+    core = a + (b - a) * np.power(x, g)
+    midtone_dip = np.sin(np.pi * x) * (1.0 - contrast) * 320.0
+    y = core - midtone_dip
     y = np.clip(y, 0, 255)
     return np.round(y).astype(int).tolist()
 

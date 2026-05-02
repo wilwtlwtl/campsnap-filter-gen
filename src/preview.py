@@ -1,34 +1,38 @@
 """
 フィルター適用 + V105センサーシミュレーション
+
+apply_filter は .flt 生成（flt_io.py）と同じ計算式を使うことで、
+アプリ内プレビューと V105 実機での見え方を一致させる。
 """
 
 import numpy as np
 from PIL import Image, ImageFilter
 from .analyzer import FltParams
+from .flt_io import build_color_matrix, build_tone_curve
 
 
 def apply_filter(img: Image.Image, params: FltParams) -> Image.Image:
     """
-    FltParams をそのまま適用するクリーンなプレビュー。
-    処理順: Gamma → Brightness → Contrast → Saturation
+    .flt と同じ処理パイプラインで画像にフィルターを適用する：
+      1. RGB各チャンネルに対し、トーンカーブ（Brightness, Contrast, Gamma反映）を適用
+      2. 3x3カラーマトリックス（Saturation + Hue）を適用
     """
-    arr = np.array(img, dtype=np.float32) / 255.0
+    arr = np.asarray(img, dtype=np.uint8).astype(np.int32)
 
-    arr[:, :, 0] = np.power(np.clip(arr[:, :, 0], 1e-6, 1.0), 1.0 / params.gamma_r)
-    arr[:, :, 1] = np.power(np.clip(arr[:, :, 1], 1e-6, 1.0), 1.0 / params.gamma_g)
-    arr[:, :, 2] = np.power(np.clip(arr[:, :, 2], 1e-6, 1.0), 1.0 / params.gamma_b)
+    curve_r = np.array(build_tone_curve(params.brightness, params.contrast, params.gamma_r), dtype=np.uint8)
+    curve_g = np.array(build_tone_curve(params.brightness, params.contrast, params.gamma_g), dtype=np.uint8)
+    curve_b = np.array(build_tone_curve(params.brightness, params.contrast, params.gamma_b), dtype=np.uint8)
 
-    arr = arr * params.brightness
-    arr = (arr - 0.5) * params.contrast + 0.5
-    arr = np.clip(arr, 0.0, 1.0)
+    arr[:, :, 0] = curve_r[arr[:, :, 0]]
+    arr[:, :, 1] = curve_g[arr[:, :, 1]]
+    arr[:, :, 2] = curve_b[arr[:, :, 2]]
 
-    result = Image.fromarray((arr * 255).astype(np.uint8), "RGB")
-    if abs(params.saturation - 1.0) > 0.001:
-        hsv = np.array(result.convert("HSV"), dtype=np.float32)
-        hsv[:, :, 1] = np.clip(hsv[:, :, 1] * params.saturation, 0, 255)
-        result = Image.fromarray(hsv.astype(np.uint8), "HSV").convert("RGB")
+    matrix = build_color_matrix(params.saturation, params.hue)
+    arr_f = arr.astype(np.float32)
+    out = arr_f @ matrix.T
+    out = np.clip(out, 0, 255)
 
-    return result
+    return Image.fromarray(out.astype(np.uint8), "RGB")
 
 
 def simulate_v105(img: Image.Image, params: FltParams, seed: int = 42) -> Image.Image:
