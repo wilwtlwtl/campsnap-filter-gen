@@ -47,7 +47,7 @@ if uploaded_files:
         img = Image.open(f).convert("RGB")
         images.append(img)
         with cols[i % 5]:
-            st.image(img, use_container_width=True)
+            st.image(img, width="stretch")
             st.caption(f"{i+1}枚目")
 
     st.info(f"{len(images)} 枚の写真を読み込みました。")
@@ -81,7 +81,7 @@ if not can_generate:
 if st.button(
     "🎨 プリセットを自動生成する",
     type="primary",
-    use_container_width=True,
+    width="stretch",
     disabled=not can_generate,
 ):
     with st.spinner(f"{len(images)}枚の写真を解析中…"):
@@ -144,7 +144,7 @@ if st.button(
             "緑み(GammaG)": round(diag["mean"]["GammaG"], 3),
             "青み(GammaB)": round(diag["mean"]["GammaB"], 3),
         })
-        st.dataframe(pd.DataFrame(rows).set_index("写真"), use_container_width=True)
+        st.dataframe(pd.DataFrame(rows).set_index("写真"), width="stretch")
 
     # ── プレビュー ──────────────────────────────────────────────────────────
 
@@ -152,13 +152,13 @@ if st.button(
     c1, c2, c3 = st.columns(3)
     with c1:
         st.caption("元の写真")
-        st.image(images[0], use_container_width=True)
+        st.image(images[0], width="stretch")
     with c2:
         st.caption("フィルター適用後")
-        st.image(apply_filter(images[0], params), use_container_width=True)
+        st.image(apply_filter(images[0], params), width="stretch")
     with c3:
         st.caption("V105シミュレーション")
-        st.image(simulate_v105(images[0], params), use_container_width=True)
+        st.image(simulate_v105(images[0], params), width="stretch")
 
     # ── 保存 ────────────────────────────────────────────────────────────────
 
@@ -167,7 +167,7 @@ if st.button(
     col_save, col_dl = st.columns(2)
 
     with col_save:
-        if st.button("💾 プリセットとして保存する", use_container_width=True, type="primary"):
+        if st.button("💾 プリセットとして保存する", width="stretch", type="primary"):
             existing = load_presets()
             if preset_name in existing:
                 st.warning(f"「{preset_name}」はすでに存在します。上書きしました。")
@@ -195,7 +195,7 @@ if st.button(
             data=flt_bytes,
             file_name=f"{final_name}.flt",
             mime="application/octet-stream",
-            use_container_width=True,
+            width="stretch",
         )
 
 
