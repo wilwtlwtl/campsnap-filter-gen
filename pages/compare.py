@@ -40,7 +40,7 @@ if st.session_state.compare_img is None:
     st.info("写真をアップロードすると、各プリセットの仕上がりを並べて表示します。")
     st.stop()
 
-st.image(st.session_state.compare_img, caption="比較用の写真", width="stretch")
+st.image(st.session_state.compare_img, caption="比較用の写真", use_container_width=True)
 st.divider()
 
 
@@ -94,7 +94,7 @@ for row in rows:
     cols = st.columns(len(row))
     for col, (label, filtered_img, preset_name) in zip(cols, row):
         with col:
-            st.image(filtered_img, width="stretch")
+            st.image(filtered_img, use_container_width=True)
             st.caption(label)
             if preset_name:
                 meta = presets[preset_name].get("meta", {})
@@ -114,6 +114,6 @@ for row in rows:
                     data=flt_bytes,
                     file_name=f"{final_name}.flt",
                     mime="application/octet-stream",
-                    width="stretch",
+                    use_container_width=True,
                     key=f"dl_{preset_name}",
                 )
