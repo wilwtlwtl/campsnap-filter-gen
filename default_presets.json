@@ -111,20 +111,20 @@
       "description": "Agfa Vista 200 / 街・スナップ写真から生成"
     }
   },
-  "LomoLadyGrey400": {
+  "LomoChromeMetropolis2021": {
     "params": {
-      "Brightness": 1.012,
+      "Brightness": 0.981,
       "Contrast": 1.4,
-      "Saturation": 0.0,
+      "Saturation": 1.241,
       "Hue": 0,
-      "GammaR": 0.786,
-      "GammaG": 0.786,
-      "GammaB": 0.786
+      "GammaR": 0.656,
+      "GammaG": 0.643,
+      "GammaB": 0.695
     },
     "meta": {
-      "n_images": 4,
-      "stability": 53,
-      "description": "Lomo Lady Grey 400 (B&W) / 街・スナップ写真から生成"
+      "n_images": 10,
+      "stability": 63,
+      "description": "2021 LomoChrome Metropolis / シネマティック・くすみ・低彩度の特徴を持つフィルム"
     }
   },
   "KodakTriX400": {
