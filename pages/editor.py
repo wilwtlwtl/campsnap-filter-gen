@@ -23,7 +23,8 @@ _SNAP_IMG_PATH = Path(__file__).parent.parent / "sample_snap.jpg"
 # ── プリセット未指定なら戻す ──────────────────────────────────────────────
 if "params" not in st.session_state or st.session_state.params is None:
     st.warning("プリセットが選択されていません。ホームに戻って選択してください。")
-    st.page_link("pages/home.py", label="← ホームに戻る")
+    if st.button("← ホームに戻る", key="editor_back_no_preset"):
+        st.switch_page("pages/home.py")
     st.stop()
 
 

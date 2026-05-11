@@ -240,9 +240,11 @@ st.markdown('<div class="sub-section">', unsafe_allow_html=True)
 st.markdown('<div class="sub-section-title">別の作り方</div>', unsafe_allow_html=True)
 c1, c2 = st.columns(2)
 with c1:
-    st.page_link("pages/preset_builder.py", label="🛠️ ゼロから作る", use_container_width=True)
+    if st.button("🛠️ ゼロから作る", key="sub_preset_builder", use_container_width=True):
+        st.switch_page("pages/preset_builder.py")
 with c2:
-    st.page_link("pages/filter_gen.py", label="📸 写真から作る", use_container_width=True)
+    if st.button("📸 写真から作る", key="sub_filter_gen", use_container_width=True):
+        st.switch_page("pages/filter_gen.py")
 st.markdown('</div>', unsafe_allow_html=True)
 
 

@@ -46,7 +46,8 @@ st.markdown("""
 
 
 # ── ヘッダー ───────────────────────────────────────────────────────────
-st.page_link("pages/home.py", label="← ホームに戻る")
+if st.button("← ホームに戻る", key="fg_back_home"):
+    st.switch_page("pages/home.py")
 st.markdown('<div class="fg-title">📸 写真からフィルターを作る</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="fg-sub">「こんな色で撮りたい！」という写真を1枚アップロードするだけで、V105用のフィルターを自動生成します。</div>',

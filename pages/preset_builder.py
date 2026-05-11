@@ -15,6 +15,9 @@ from src.flt_io import to_flt_bytes
 from src.preview import apply_filter, simulate_v105
 
 
+if st.button("← ホームに戻る", key="pb_back_home"):
+    st.switch_page("pages/home.py")
+
 st.title("🎞️ フィルムプリセットをつくる")
 st.markdown(
     "「こんな雰囲気で撮りたい」という**参考写真を複数枚**アップロードすると、"
