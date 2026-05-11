@@ -15,36 +15,20 @@
       "description": "Kodak Ektar 100 / 街・スナップ写真から生成"
     }
   },
-  "FujiSuperia400": {
-    "params": {
-      "Brightness": 0.992,
-      "Contrast": 1.4,
-      "Saturation": 1.335,
-      "Hue": 0,
-      "GammaR": 0.742,
-      "GammaG": 0.742,
-      "GammaB": 0.637
-    },
-    "meta": {
-      "n_images": 7,
-      "stability": 52,
-      "description": "Fujifilm Superia 400 / 街・スナップ写真から生成（7枚で再解析）"
-    }
-  },
-  "FujiPro160NS": {
+  "KodakPortra400": {
     "params": {
       "Brightness": 0.993,
       "Contrast": 1.4,
-      "Saturation": 1.126,
+      "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.658,
-      "GammaG": 0.742,
-      "GammaB": 0.723
+      "GammaR": 0.706,
+      "GammaG": 0.695,
+      "GammaB": 0.688
     },
     "meta": {
-      "n_images": 5,
-      "stability": 63,
-      "description": "Fujifilm Pro 160NS / 風景写真から生成"
+      "n_images": 9,
+      "stability": 55,
+      "description": "Kodak Portra 400 / 業界標準の上品な肌色・暖色寄りのポートレート定番フィルム"
     }
   },
   "FujiPro400H": {
@@ -93,6 +77,22 @@
       "n_images": 14,
       "stability": 40,
       "description": "Flashback ONE35 / レトロ・ローファイなデジタルトイカメラの色味（高彩度・暗め・暖色寄り）"
+    }
+  },
+  "PolaroidNow": {
+    "params": {
+      "Brightness": 0.99,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.665,
+      "GammaG": 0.6,
+      "GammaB": 0.681
+    },
+    "meta": {
+      "n_images": 12,
+      "stability": 53,
+      "description": "Polaroid Now I-Type / シャドウが青緑寄りの夢のような暖色トーン、ノスタルジックなインスタント写真"
     }
   },
   "AgfaVista200": {
