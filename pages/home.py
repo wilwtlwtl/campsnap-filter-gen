@@ -19,7 +19,14 @@ from src.preset_builder import load_presets, preset_to_flt_params
 _SNAP_IMG_PATH = Path(__file__).parent.parent / "sample_snap.jpg"
 _THUMB_SIZE = (300, 200)
 
-# カテゴリ定義（順序がそのまま表示順、メーカー別＋実機＋スタイル）
+# 色種別カテゴリ（1段目ピル）
+_KIND_CATEGORIES = [
+    ("all",        "すべて"),
+    ("color",      "カラー"),
+    ("monochrome", "モノクロ"),
+]
+
+# ソースカテゴリ（2段目ピル、メーカー別＋実機＋スタイル）
 _CATEGORIES = [
     ("all",        "すべて"),
     ("kodak",      "Kodak"),
@@ -31,6 +38,12 @@ _CATEGORIES = [
     ("camera",     "実機"),
     ("style",      "スタイル"),
 ]
+
+
+def _kind_of(preset_data: dict) -> str:
+    """Saturation==0.0 をモノクロと判定"""
+    sat = preset_data.get("params", {}).get("Saturation", 1.0)
+    return "monochrome" if sat == 0.0 else "color"
 
 
 # ── キャッシュ ─────────────────────────────────────────────────────────
@@ -178,22 +191,40 @@ if not presets:
     st.stop()
 
 
-# ── カテゴリピル ───────────────────────────────────────────────────────
+# ── カテゴリピル（2段：色種別 + ソース） ──────────────────────────────
 def _count_in_cat(cat_key: str) -> int:
     if cat_key == "all":
         return len(presets)
     return sum(1 for d in presets.values() if (d.get("meta") or {}).get("category") == cat_key)
 
 
-# 件数付きラベル（ピル）
+def _count_in_kind(kind_key: str) -> int:
+    if kind_key == "all":
+        return len(presets)
+    return sum(1 for d in presets.values() if _kind_of(d) == kind_key)
+
+
+# 1段目：色種別ピル
+kind_labels = [f"{label} ({_count_in_kind(key)})" for key, label in _KIND_CATEGORIES]
+kind_key_by_label = {f"{label} ({_count_in_kind(key)})": key for key, label in _KIND_CATEGORIES}
+selected_kind_label = st.radio(
+    "色種別",
+    kind_labels,
+    horizontal=True,
+    label_visibility="collapsed",
+    key="kind_pill",
+)
+selected_kind = kind_key_by_label[selected_kind_label]
+
+# 2段目：ソースピル
 pill_labels = [f"{label} ({_count_in_cat(key)})" for key, label in _CATEGORIES]
 pill_key_by_label = {f"{label} ({_count_in_cat(key)})": key for key, label in _CATEGORIES}
-
 selected_label = st.radio(
-    "カテゴリ",
+    "ソース",
     pill_labels,
     horizontal=True,
     label_visibility="collapsed",
+    key="source_pill",
 )
 selected_cat = pill_key_by_label[selected_label]
 
@@ -202,13 +233,14 @@ selected_cat = pill_key_by_label[selected_label]
 import json as _json
 previews = _build_preset_previews(_json.dumps(presets, ensure_ascii=False), _img_mtime_key())
 
-if selected_cat == "all":
-    filtered_names = list(presets.keys())
-else:
-    filtered_names = [
-        n for n, d in presets.items()
-        if (d.get("meta") or {}).get("category") == selected_cat
-    ]
+# 2軸AND結合でフィルタリング
+filtered_names = []
+for n, d in presets.items():
+    if selected_cat != "all" and (d.get("meta") or {}).get("category") != selected_cat:
+        continue
+    if selected_kind != "all" and _kind_of(d) != selected_kind:
+        continue
+    filtered_names.append(n)
 
 if not filtered_names:
     st.info("該当するプリセットがありません。")
