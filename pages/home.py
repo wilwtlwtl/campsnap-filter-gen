@@ -34,7 +34,15 @@ _CATEGORIES = [
 
 # ── キャッシュ ─────────────────────────────────────────────────────────
 def _img_mtime_key() -> str:
-    return str(_SNAP_IMG_PATH.stat().st_mtime) if _SNAP_IMG_PATH.exists() else "0"
+    """画像ファイルの内容ベースのキャッシュキー（mtimeより信頼性が高い）"""
+    if not _SNAP_IMG_PATH.exists():
+        return "0"
+    import hashlib
+    s = _SNAP_IMG_PATH.stat()
+    # ファイルサイズ + 内容の先頭16KBのMD5（高速＆十分な識別性）
+    with open(_SNAP_IMG_PATH, "rb") as f:
+        head = f.read(16384)
+    return f"{s.st_size}_{hashlib.md5(head).hexdigest()[:16]}"
 
 
 @st.cache_data
