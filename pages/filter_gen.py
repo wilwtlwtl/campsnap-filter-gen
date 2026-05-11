@@ -211,15 +211,53 @@ st.divider()
 # プリセット選択（保存済みがある場合のみ表示）
 # ════════════════════════════════════════════════════════════════════════════
 
+# カテゴリ定義（順序がそのまま表示順になる）
+_CATEGORY_LABELS = [
+    ("color",       "📷 カラーフィルム"),
+    ("camera",      "🎥 実機・トイカメラ"),
+    ("monochrome",  "⚫ モノクロフィルム"),
+    ("lomochrome",  "🌈 LomoChromeシリーズ"),
+]
+_CATEGORY_ICON = {k: v.split(" ", 1)[0] for k, v in _CATEGORY_LABELS}
+_CATEGORY_ORDER = [k for k, _ in _CATEGORY_LABELS]
+
+
+def _group_by_category(presets_dict):
+    """presetsをカテゴリ別にグループ化して返す。{category: [name, ...]}"""
+    groups = {k: [] for k in _CATEGORY_ORDER}
+    other = []
+    for name, data in presets_dict.items():
+        cat = (data.get("meta", {}) or {}).get("category")
+        if cat in groups:
+            groups[cat].append(name)
+        else:
+            other.append(name)
+    if other:
+        groups["_other"] = other
+    return groups
+
+
 presets = load_presets()
 if presets:
     st.subheader("🎞️ 保存済みプリセットから選ぶ")
     st.caption("「プリセットをつくる」ページで作成・保存したプリセットをすぐに適用できます。")
 
-    preset_names = list(presets.keys())
+    # ドロップダウン用：カテゴリのアイコン付きラベルでカテゴリ順に並べる
+    _groups = _group_by_category(presets)
+    _ordered_names: list[str] = []
+    _display_label_map: dict[str, str] = {"（選択しない）": "（選択しない）"}
+    for cat, label in _CATEGORY_LABELS:
+        for n in _groups.get(cat, []):
+            _ordered_names.append(n)
+            _display_label_map[n] = f"{_CATEGORY_ICON[cat]} {n}"
+    for n in _groups.get("_other", []):
+        _ordered_names.append(n)
+        _display_label_map[n] = n
+
     selected = st.selectbox(
         "プリセットを選択",
-        ["（選択しない）"] + preset_names,
+        ["（選択しない）"] + _ordered_names,
+        format_func=lambda x: _display_label_map.get(x, x),
         label_visibility="collapsed",
     )
 
@@ -249,6 +287,7 @@ if presets:
             GALLERY_COLS = 3
 
             def _render_group(names):
+                names = [n for n in names if n in previews]
                 for row_start in range(0, len(names), GALLERY_COLS):
                     row_names = names[row_start:row_start + GALLERY_COLS]
                     cols = st.columns(GALLERY_COLS)
@@ -264,7 +303,15 @@ if presets:
                                     st.session_state.warnings = []
                                     st.rerun()
 
-            _render_group(list(previews.keys()))
+            for cat, label in _CATEGORY_LABELS:
+                names_in_cat = _groups.get(cat, [])
+                if not names_in_cat:
+                    continue
+                st.markdown(f"**{label}**")
+                _render_group(names_in_cat)
+            if _groups.get("_other"):
+                st.markdown("**📁 その他（自作プリセット）**")
+                _render_group(_groups["_other"])
 
     st.caption("新しいプリセットを作るには左メニューの「プリセットをつくる」ページへ。")
     st.divider()
