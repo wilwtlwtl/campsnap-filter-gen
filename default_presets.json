@@ -33,21 +33,55 @@
       "description": "Kodak Portra 400 / 業界標準の上品な肌色・暖色寄りのポートレート定番フィルム"
     }
   },
-  "FujiPro400H": {
+  "KodakPortra160": {
     "params": {
-      "Brightness": 0.886,
+      "Brightness": 0.836,
+      "Contrast": 1.4,
+      "Saturation": 1.435,
+      "Hue": 0,
+      "GammaR": 0.576,
+      "GammaG": 0.565,
+      "GammaB": 0.547
+    },
+    "meta": {
+      "category": "kodak",
+      "n_images": 8,
+      "stability": 64,
+      "description": "Kodak Portra 160 / 上品で柔らかいパステル調・低彩度のポートレート定番フィルム"
+    }
+  },
+  "KodakTriX400": {
+    "params": {
+      "Brightness": 0.996,
+      "Contrast": 1.4,
+      "Saturation": 0.0,
+      "Hue": 0,
+      "GammaR": 0.688,
+      "GammaG": 0.688,
+      "GammaB": 0.688
+    },
+    "meta": {
+      "category": "kodak",
+      "n_images": 5,
+      "stability": 64,
+      "description": "Kodak Tri-X 400 (B&W) / 暗め・引き締まった粒子感のクラシックB&W"
+    }
+  },
+  "FujifilmSuperia400": {
+    "params": {
+      "Brightness": 0.97,
       "Contrast": 1.4,
       "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.589,
-      "GammaG": 0.606,
-      "GammaB": 0.619
+      "GammaR": 0.62,
+      "GammaG": 0.63,
+      "GammaB": 0.76
     },
     "meta": {
       "category": "fujifilm",
-      "n_images": 13,
+      "n_images": 16,
       "stability": 61,
-      "description": "Fuji Pro 400H / 低彩度・明るめ・寒色寄りで落ち着いた風景表現"
+      "description": "Fujifilm Superia 400 / 中彩度でバランスの良いオールラウンド・スナップ向けフィルム"
     }
   },
   "Cinestill800T": {
@@ -82,57 +116,6 @@
       "n_images": 5,
       "stability": 73,
       "description": "Agfa Vista 200 / 高彩度・鮮やかで深い発色のオールラウンドフィルム"
-    }
-  },
-  "FlashbackONE35": {
-    "params": {
-      "Brightness": 1.0,
-      "Contrast": 1.4,
-      "Saturation": 1.5,
-      "Hue": 0,
-      "GammaR": 0.714,
-      "GammaG": 0.584,
-      "GammaB": 0.575
-    },
-    "meta": {
-      "category": "camera",
-      "n_images": 14,
-      "stability": 40,
-      "description": "Flashback ONE35 / レトロ・ローファイなデジタルトイカメラの色味（高彩度・暗め・暖色寄り）"
-    }
-  },
-  "PolaroidNow": {
-    "params": {
-      "Brightness": 0.99,
-      "Contrast": 1.4,
-      "Saturation": 1.5,
-      "Hue": 0,
-      "GammaR": 0.665,
-      "GammaG": 0.6,
-      "GammaB": 0.681
-    },
-    "meta": {
-      "category": "camera",
-      "n_images": 12,
-      "stability": 53,
-      "description": "Polaroid Now I-Type / シャドウが青緑寄りの夢のような暖色トーン、ノスタルジックなインスタント写真"
-    }
-  },
-  "KodakTriX400": {
-    "params": {
-      "Brightness": 0.996,
-      "Contrast": 1.4,
-      "Saturation": 0.0,
-      "Hue": 0,
-      "GammaR": 0.688,
-      "GammaG": 0.688,
-      "GammaB": 0.688
-    },
-    "meta": {
-      "category": "kodak",
-      "n_images": 5,
-      "stability": 64,
-      "description": "Kodak Tri-X 400 (B&W) / 暗め・引き締まった粒子感のクラシックB&W"
     }
   },
   "IlfordHP5Plus": {
@@ -203,21 +186,38 @@
       "description": "LomoChrome Turquoise XR / 赤→ターコイズに色相転換、青空がオレンジになる実験的フィルム"
     }
   },
-  "LomoChromeColor92": {
+  "FlashbackONE35": {
     "params": {
-      "Brightness": 0.984,
+      "Brightness": 1.0,
       "Contrast": 1.4,
       "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.682,
-      "GammaG": 0.659,
-      "GammaB": 0.636
+      "GammaR": 0.714,
+      "GammaG": 0.584,
+      "GammaB": 0.575
     },
     "meta": {
-      "category": "lomography",
-      "n_images": 10,
-      "stability": 61,
-      "description": "LomoChrome Color '92 ISO 400 / 90年代風ノスタルジック・粒子大・暖色寄りの色合い"
+      "category": "camera",
+      "n_images": 14,
+      "stability": 40,
+      "description": "Flashback ONE35 / レトロ・ローファイなデジタルトイカメラの色味（高彩度・暗め・暖色寄り）"
+    }
+  },
+  "PolaroidNow": {
+    "params": {
+      "Brightness": 0.99,
+      "Contrast": 1.4,
+      "Saturation": 1.5,
+      "Hue": 0,
+      "GammaR": 0.665,
+      "GammaG": 0.6,
+      "GammaB": 0.681
+    },
+    "meta": {
+      "category": "camera",
+      "n_images": 12,
+      "stability": 53,
+      "description": "Polaroid Now I-Type / シャドウが青緑寄りの夢のような暖色トーン、ノスタルジックなインスタント写真"
     }
   }
 }
