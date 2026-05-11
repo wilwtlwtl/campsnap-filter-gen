@@ -227,8 +227,12 @@ else:
                         st.session_state.params = p
                         st.session_state.analyzed = True
                         st.session_state.warnings = []
-                        st.session_state["incoming_preset_name"] = name
-                        st.switch_page("pages/filter_gen.py")
+                        st.session_state.current_preset_name = name
+                        # editor 側で base を再構築させるためフラグを更新
+                        st.session_state.base_params = None
+                        st.session_state.warmth_offset = 0
+                        st.session_state.strength = 1.0
+                        st.switch_page("pages/editor.py")
 
 
 # ── サブ動線 ───────────────────────────────────────────────────────────

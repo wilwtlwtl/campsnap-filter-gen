@@ -10,9 +10,10 @@ st.set_page_config(
 pg = st.navigation(
     [
         st.Page("pages/home.py",           title="ホーム",                   default=True),
-        st.Page("pages/filter_gen.py",     title="📷 フィルターをつくる"),
-        st.Page("pages/preset_builder.py", title="🎞️ プリセットをつくる"),
-        st.Page("pages/compare.py",        title="🔍 フィルターを比較する"),
+        st.Page("pages/editor.py",         title="編集"),
+        st.Page("pages/filter_gen.py",     title="写真から作る"),
+        st.Page("pages/preset_builder.py", title="ゼロから作る"),
+        st.Page("pages/compare.py",        title="フィルター比較"),
     ],
     position="hidden",
 )
