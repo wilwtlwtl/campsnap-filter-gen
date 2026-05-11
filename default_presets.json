@@ -219,5 +219,73 @@
       "stability": 53,
       "description": "Polaroid Now I-Type / シャドウが青緑寄りの夢のような暖色トーン、ノスタルジックなインスタント写真"
     }
+  },
+  "DaidoMoriyama": {
+    "params": {
+      "Brightness": 0.933,
+      "Contrast": 1.4,
+      "Saturation": 0.0,
+      "Hue": 0,
+      "GammaR": 0.764,
+      "GammaG": 0.757,
+      "GammaB": 0.756
+    },
+    "meta": {
+      "category": "style",
+      "n_images": 6,
+      "stability": 61,
+      "description": "森山大道 / 超ハイコントラスト・荒れたストリート・暗部黒つぶれの白黒スナップ"
+    }
+  },
+  "VivianMaier": {
+    "params": {
+      "Brightness": 0.973,
+      "Contrast": 1.4,
+      "Saturation": 0.0,
+      "Hue": 0,
+      "GammaR": 0.602,
+      "GammaG": 0.602,
+      "GammaB": 0.602
+    },
+    "meta": {
+      "category": "style",
+      "n_images": 12,
+      "stability": 76,
+      "description": "Vivian Maier / ニュートラルな階調・古典的なストリートスナップの白黒"
+    }
+  },
+  "Hiromix": {
+    "params": {
+      "Brightness": 0.826,
+      "Contrast": 1.4,
+      "Saturation": 1.138,
+      "Hue": 0,
+      "GammaR": 0.584,
+      "GammaG": 0.611,
+      "GammaB": 0.7
+    },
+    "meta": {
+      "category": "style",
+      "n_images": 7,
+      "stability": 62,
+      "description": "HIROMIX / 90sガーリーフォト・カラーフィルムスナップ・ハイキー・軽い暖色"
+    }
+  },
+  "StephenShore": {
+    "params": {
+      "Brightness": 1.155,
+      "Contrast": 1.4,
+      "Saturation": 1.165,
+      "Hue": 0,
+      "GammaR": 0.559,
+      "GammaG": 0.846,
+      "GammaB": 0.805
+    },
+    "meta": {
+      "category": "style",
+      "n_images": 5,
+      "stability": 64,
+      "description": "Stephen Shore / アメリカン・ニュー・カラー・大判ナチュラル風景"
+    }
   }
 }

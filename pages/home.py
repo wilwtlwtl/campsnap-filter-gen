@@ -19,7 +19,7 @@ from src.preset_builder import load_presets, preset_to_flt_params
 _SNAP_IMG_PATH = Path(__file__).parent.parent / "sample_snap.jpg"
 _THUMB_SIZE = (300, 200)
 
-# カテゴリ定義（順序がそのまま表示順、メーカー別＋実機）
+# カテゴリ定義（順序がそのまま表示順、メーカー別＋実機＋スタイル）
 _CATEGORIES = [
     ("all",        "すべて"),
     ("kodak",      "Kodak"),
@@ -29,6 +29,7 @@ _CATEGORIES = [
     ("ilford",     "Ilford"),
     ("lomography", "Lomography"),
     ("camera",     "実機"),
+    ("style",      "スタイル"),
 ]
 
 
