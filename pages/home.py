@@ -59,9 +59,9 @@ def _build_preset_previews(presets_json: str, _img_key: str) -> dict:
 # ── スタイル ───────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-/* モバイル幅で本文を圧迫しないよう余白圧縮 */
+/* モバイル幅で本文を圧迫しないよう余白圧縮（ただしStreamlitヘッダーに被らない最低限） */
 .block-container {
-    padding-top: 1.2rem !important;
+    padding-top: 3.5rem !important;
     padding-bottom: 1.5rem !important;
     max-width: 720px;
 }

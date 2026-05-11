@@ -53,7 +53,7 @@ if st.session_state.base_params is None or \
 st.markdown("""
 <style>
 .block-container {
-    padding-top: 0.8rem !important;
+    padding-top: 3.5rem !important;
     padding-bottom: 1.5rem !important;
     max-width: 720px;
 }
