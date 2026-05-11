@@ -10,7 +10,7 @@
       "GammaB": 0.812
     },
     "meta": {
-      "category": "color",
+      "category": "kodak",
       "n_images": 3,
       "stability": 67,
       "description": "Kodak Ektar 100 / 中彩度・明るめ・ニュートラルな鮮やかカラー"
@@ -27,7 +27,7 @@
       "GammaB": 0.688
     },
     "meta": {
-      "category": "color",
+      "category": "kodak",
       "n_images": 9,
       "stability": 55,
       "description": "Kodak Portra 400 / 業界標準の上品な肌色・暖色寄りのポートレート定番フィルム"
@@ -36,15 +36,15 @@
   "FujiPro400H": {
     "params": {
       "Brightness": 0.998,
-      "Contrast": 1.400,
+      "Contrast": 1.4,
       "Saturation": 1.122,
       "Hue": 0,
       "GammaR": 0.843,
-      "GammaG": 0.850,
+      "GammaG": 0.85,
       "GammaB": 0.873
     },
     "meta": {
-      "category": "color",
+      "category": "fujifilm",
       "n_images": 4,
       "stability": 53,
       "description": "Fuji Pro 400H / 低彩度・明るめ・寒色寄りで落ち着いた風景表現"
@@ -61,7 +61,7 @@
       "GammaB": 0.693
     },
     "meta": {
-      "category": "color",
+      "category": "cinestill",
       "n_images": 5,
       "stability": 59,
       "description": "Cinestill 800T / 高彩度・暗め・重厚なシネマティック表現（タングステン光源向け）"
@@ -71,14 +71,14 @@
     "params": {
       "Brightness": 0.994,
       "Contrast": 1.4,
-      "Saturation": 1.500,
+      "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.730,
+      "GammaR": 0.73,
       "GammaG": 0.699,
       "GammaB": 0.721
     },
     "meta": {
-      "category": "color",
+      "category": "agfa",
       "n_images": 5,
       "stability": 73,
       "description": "Agfa Vista 200 / 高彩度・鮮やかで深い発色のオールラウンドフィルム"
@@ -129,7 +129,7 @@
       "GammaB": 0.688
     },
     "meta": {
-      "category": "monochrome",
+      "category": "kodak",
       "n_images": 5,
       "stability": 64,
       "description": "Kodak Tri-X 400 (B&W) / 暗め・引き締まった粒子感のクラシックB&W"
@@ -137,7 +137,7 @@
   },
   "IlfordHP5Plus": {
     "params": {
-      "Brightness": 0.990,
+      "Brightness": 0.99,
       "Contrast": 1.4,
       "Saturation": 0.0,
       "Hue": 0,
@@ -146,7 +146,7 @@
       "GammaB": 0.726
     },
     "meta": {
-      "category": "monochrome",
+      "category": "ilford",
       "n_images": 5,
       "stability": 67,
       "description": "Ilford HP5 Plus (B&W) / 中間トーン・ニュートラルで万能なB&W"
@@ -163,7 +163,7 @@
       "GammaB": 0.695
     },
     "meta": {
-      "category": "lomochrome",
+      "category": "lomography",
       "n_images": 10,
       "stability": 63,
       "description": "2021 LomoChrome Metropolis / シネマティック・くすみ・低彩度の特徴を持つフィルム"
@@ -180,7 +180,7 @@
       "GammaB": 0.691
     },
     "meta": {
-      "category": "lomochrome",
+      "category": "lomography",
       "n_images": 10,
       "stability": 62,
       "description": "LomoChrome Purple XR 100-400 / 緑→紫に色相転換するサイケデリックフィルム"
@@ -197,7 +197,7 @@
       "GammaB": 0.728
     },
     "meta": {
-      "category": "lomochrome",
+      "category": "lomography",
       "n_images": 10,
       "stability": 54,
       "description": "LomoChrome Turquoise XR / 赤→ターコイズに色相転換、青空がオレンジになる実験的フィルム"
@@ -214,7 +214,7 @@
       "GammaB": 0.636
     },
     "meta": {
-      "category": "lomochrome",
+      "category": "lomography",
       "n_images": 10,
       "stability": 61,
       "description": "LomoChrome Color '92 ISO 400 / 90年代風ノスタルジック・粒子大・暖色寄りの色合い"

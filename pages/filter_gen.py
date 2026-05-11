@@ -211,15 +211,24 @@ st.divider()
 # プリセット選択（保存済みがある場合のみ表示）
 # ════════════════════════════════════════════════════════════════════════════
 
-# カテゴリ定義（順序がそのまま表示順になる）
+# カテゴリ定義（順序がそのまま表示順になる、メーカー別）
 _CATEGORY_LABELS = [
-    ("color",       "📷 カラーフィルム"),
+    ("kodak",       "🎞️ Kodak"),
+    ("fujifilm",    "🎞️ Fujifilm"),
+    ("cinestill",   "🎞️ Cinestill"),
+    ("agfa",        "🎞️ Agfa"),
+    ("ilford",      "🎞️ Ilford"),
+    ("lomography",  "🌈 Lomography"),
     ("camera",      "🎥 実機・トイカメラ"),
-    ("monochrome",  "⚫ モノクロフィルム"),
-    ("lomochrome",  "🌈 LomoChromeシリーズ"),
 ]
 _CATEGORY_ICON = {k: v.split(" ", 1)[0] for k, v in _CATEGORY_LABELS}
 _CATEGORY_ORDER = [k for k, _ in _CATEGORY_LABELS]
+
+# home.py から遷移してきた場合の通知（一度だけ表示）
+if st.session_state.get("incoming_preset_name"):
+    _name = st.session_state.pop("incoming_preset_name")
+    st.success(f"✅ プリセット「{_name}」を読み込みました。下のスライダーで調整してください。")
+    st.page_link("pages/home.py", label="← ホームに戻る")
 
 
 def _group_by_category(presets_dict):
