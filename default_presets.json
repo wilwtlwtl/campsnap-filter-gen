@@ -18,52 +18,52 @@
   },
   "KodakPortra400": {
     "params": {
-      "Brightness": 0.993,
+      "Brightness": 0.948,
       "Contrast": 1.4,
       "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.706,
-      "GammaG": 0.695,
-      "GammaB": 0.688
+      "GammaR": 0.656,
+      "GammaG": 0.64,
+      "GammaB": 0.654
     },
     "meta": {
       "category": "kodak",
-      "n_images": 9,
-      "stability": 55,
+      "n_images": 18,
+      "stability": 61,
       "description": "Kodak Portra 400 / 業界標準の上品な肌色・暖色寄りのポートレート定番フィルム"
     }
   },
   "FujiPro400H": {
     "params": {
-      "Brightness": 0.998,
+      "Brightness": 0.886,
       "Contrast": 1.4,
-      "Saturation": 1.122,
+      "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.843,
-      "GammaG": 0.85,
-      "GammaB": 0.873
+      "GammaR": 0.589,
+      "GammaG": 0.606,
+      "GammaB": 0.619
     },
     "meta": {
       "category": "fujifilm",
-      "n_images": 4,
-      "stability": 53,
+      "n_images": 13,
+      "stability": 61,
       "description": "Fuji Pro 400H / 低彩度・明るめ・寒色寄りで落ち着いた風景表現"
     }
   },
   "Cinestill800T": {
     "params": {
-      "Brightness": 1.018,
+      "Brightness": 0.991,
       "Contrast": 1.4,
       "Saturation": 1.5,
       "Hue": 0,
-      "GammaR": 0.671,
-      "GammaG": 0.663,
-      "GammaB": 0.693
+      "GammaR": 0.657,
+      "GammaG": 0.641,
+      "GammaB": 0.729
     },
     "meta": {
       "category": "cinestill",
-      "n_images": 5,
-      "stability": 59,
+      "n_images": 18,
+      "stability": 60,
       "description": "Cinestill 800T / 高彩度・暗め・重厚なシネマティック表現（タングステン光源向け）"
     }
   },
@@ -188,18 +188,18 @@
   },
   "LomoChromeTurquoise": {
     "params": {
-      "Brightness": 0.989,
+      "Brightness": 0.916,
       "Contrast": 1.4,
-      "Saturation": 1.5,
+      "Saturation": 1.382,
       "Hue": 0,
-      "GammaR": 0.726,
-      "GammaG": 0.713,
-      "GammaB": 0.728
+      "GammaR": 0.655,
+      "GammaG": 0.612,
+      "GammaB": 0.614
     },
     "meta": {
       "category": "lomography",
-      "n_images": 10,
-      "stability": 54,
+      "n_images": 17,
+      "stability": 62,
       "description": "LomoChrome Turquoise XR / 赤→ターコイズに色相転換、青空がオレンジになる実験的フィルム"
     }
   },
